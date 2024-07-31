@@ -1,0 +1,387 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.Incident>
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Incident Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+            <div class="col"> @*col-12 col-sm-6 col-md-3*@
+                <a asp-area="" asp-controller="Incident" asp-action="IndexIncident" style="color: #6C757D">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-bug"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">All Incidents</span>
+                            <span class="info-box-number">
+                                @ViewBag.ListCountAll
+                                <small></small>
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>               
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col">
+                <a asp-area="" asp-controller="Incident" asp-action="IndexIncident" style="color: #6C757D">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bug"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Open</span>
+                            <span class="info-box-number">@ViewBag.ListCountOpen</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>                
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+                        
+            <!-- /.col -->
+            <div class="col">
+                <a asp-area="" asp-controller="Incident" asp-action="IndexIncident" style="color: #6C757D">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-bug"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">In Progress</span>
+                            <span class="info-box-number">@ViewBag.ListCountIP</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>                
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <div class="col">
+                <a asp-area="" asp-controller="Incident" asp-action="IndexIncident" style="color: #6C757D">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-bug"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Pause</span>
+                            <span class="info-box-number">@ViewBag.ListCountPause</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a asp-area="" asp-controller="Incident" asp-action="IndexIncident" style="color: #6C757D">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-bug"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Closed</span>
+                            <span class="info-box-number">@ViewBag.ListCountClosed </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
+                <!-- /.info-box -->
+            </div>
+
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-md-8">
+                <!-- DONUT CHART -->
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Incidents per Status</h3>
+
+                        @*  <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                        </div>*@
+                    </div>
+                    <div class="card-body">
+                        <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-md-4">
+                <!-- Info Boxes Style 2 -->
+                <a asp-area="" asp-controller="Customer" asp-action="Index">
+                    <div class="info-box mb-3 bg-warning">
+                        <span class="info-box-icon"><i class="fas fa-users"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Customer/Organization</span>
+                            <span class="info-box-number">@ViewBag.CountCustomer</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
+                <!-- /.info-box -->
+                <a asp-area="" asp-controller="Projects" asp-action="Index">
+                    <div class="info-box mb-3 bg-success">
+                        <span class="info-box-icon"><i class="fas fa-business-time"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Project</span>
+                            <span class="info-box-number">@ViewBag.CountProject </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
+                <!-- /.info-box -->
+                <a asp-area="" asp-controller="Module" asp-action="Index">
+                    <div class="info-box mb-3 bg-info">
+                        <span class="info-box-icon"><i class="fas fa-file"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Module</span>
+                            <span class="info-box-number">@ViewBag.CountModule</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
+
+                <!-- /.info-box -->
+                <a asp-area="" asp-controller="IssueType" asp-action="Index">
+                    <div class="info-box mb-3 bg-danger">
+                        <span class="info-box-icon"><i class="fas fa-bug"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Issue Type</span>
+                            <span class="info-box-number">@ViewBag.CountIssueType</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-12">
+                <!-- MAP & BOX PANE -->
+                <!-- /.card -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- USERS LIST -->
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">Incident Lists</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            @*<table class="table table-bordered m-1">*@
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Issue ID</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var obj in @ViewBag.IncidentList)
+                                    {
+                                        <tr>
+                                            <td><a bgcolor="#000310" asp-controller="Incident" asp-action="Tab" asp-route-id="@obj.IssueID">@obj.IssueID</a></td>
+                                            <td> @obj.IssueTitle</td>
+                                            <td> @obj.Category</td>
+                                            <td> @obj.Priority</td>
+                                            <td>
+                                                @if (@obj.Status == "In Progress")
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        @obj.Status
+                                                    </span>
+                                                }
+
+                                                @if (@obj.Status == "Open")
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        @obj.Status
+                                                    </span>
+                                                }                                                
+
+                                                @if (@obj.Status == "Pause")
+                                                {
+                                                    <span class="badge bg-info">
+                                                        @obj.Status
+                                                    </span>
+                                                }
+
+                                                @if (@obj.Status == "Closed")
+                                                {
+                                                    <span class="badge bg-success">
+                                                        @obj.Status
+                                                    </span>
+                                                }
+                                                
+                                            </td>
+
+                                        </tr>
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <a asp-area="" asp-controller="Incident" asp-action="Create" class="btn btn-sm btn-info float-left">Report New Incident</a>
+                        <a asp-area="" asp-controller="Incident" asp-action="IndexIncident" class="btn btn-sm btn-secondary float-right">View All Incidents</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+
+
+        </div>
+        <!-- /.row -->
+
+        <!-- SLA Breached List -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">SLA Breached Incident Lists</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Issue ID</th>
+                                        <th>Title</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>SLA Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var obj in @ViewBag.BreachIncident)
+                                    {
+                                        <tr>
+                                            <td><a bgcolor="#000310" asp-controller="Incident" asp-action="Tab" asp-route-id="@obj.IssueID">@obj.IssueID</a></td>
+                                            <td> @obj.IssueTitle</td>
+                                            <td> @obj.Priority</td>
+                                            <td>
+                                                @if (@obj.Status == "InProgress")
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        @obj.Status
+                                                    </span>
+                                                }
+
+                                                @if (@obj.Status == "Open")
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        @obj.Status
+                                                    </span>
+                                                }                                                
+
+                                                @if (@obj.Status == "Pause")
+                                                {
+                                                    <span class="badge bg-info">
+                                                        @obj.Status
+                                                    </span>
+                                                }
+
+                                                @if (@obj.Status == "Closed")
+                                                {
+                                                    <span class="badge bg-success">
+                                                        @obj.Status
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td> @obj.SLADate</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!--/. container-fluid -->
+</section>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var openCount = @(ViewBag.ListCountOpen);
+            var inprogressCount = @(ViewBag.ListCountIP);
+            var closeCount = @(ViewBag.ListCountClosed);
+            var pauseCount = @(ViewBag.ListCountPause);
+            var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+            var donutData = {
+                labels: [
+                    'Open',
+                    'In Progress',                  
+                    'Pause',
+                    'Closed'
+                ],
+                datasets: [
+                    {
+                        data: [openCount, inprogressCount, pauseCount, closeCount],
+                        backgroundColor: ['#f56954', '#f39c12', '#335af5', '#00a65a'],
+                    }
+                ]
+            }
+            var donutOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            var donutChart = new Chart(donutChartCanvas, {
+                type: 'doughnut',
+                data: donutData,
+                options: donutOptions
+            })
+        })
+    </script>
+}

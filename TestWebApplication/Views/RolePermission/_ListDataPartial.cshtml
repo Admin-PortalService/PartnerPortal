@@ -1,0 +1,75 @@
+﻿@model TestWebApplication.Models.ViewModels.RolePermissionVM
+
+<style>
+    [class*=icheck-] > input:first-child + label, [class*=icheck-] > input:first-child + input + label {
+        line-height: 40px;
+    }
+
+        [class*=icheck-] > input:first-child + label::before, [class*=icheck-] > input:first-child + input + label::before {
+            position: relative !important;
+            vertical-align: middle !important;
+        }
+
+    [class*=icheck-] > input:first-child:checked + label::after, [class*=icheck-] > input:first-child:checked + input + label::after {
+        top: 10px !important;
+    }
+
+</style>
+
+@for (int index = 0; index < Model.RolePermissions?.Count(); index++)
+{
+    <input type="hidden" asp-for="@Model.RolePermissions[index].RolePermissionID" value="@Model.RolePermissions[index].RolePermissionID" />
+    <input type="hidden" asp-for="@Model.RolePermissions[index].RoleID" value="@Model.RolePermissions[index].RoleID" />
+    <input type="hidden" asp-for="@Model.RolePermissions[index].ModuleName" value="@Model.RolePermissions[index].ModuleName" />
+    <input type="hidden" asp-for="@Model.RolePermissions[index].CreatedOn" value="@Model.RolePermissions[index].CreatedOn" />
+    <input type="hidden" asp-for="@Model.RolePermissions[index].CreatedBy" value="@(Model.RolePermissions[index].CreatedBy ?? User.Identity?.Name)" />
+    <input type="hidden" asp-for="@Model.RolePermissions[index].ModifiedBy" value="@User.Identity?.Name" />
+    <input type="hidden" asp-for="@Model.RolePermissions[index].ModifiedOn" value="@DateTime.Now" />
+    <div class="card-header bg-white list-row">
+        <div class="user-block">
+            <div class="circleImageText"
+             style="background-color: @(String.Format("#{0:X6}", new Random().Next(0x1000000))) !important">
+                @Model.RolePermissions[index].ModuleName?.Substring(0,1).ToUpper()
+            </div>
+            <span class="username" style="line-height:40px;">
+                @{
+                    var moduleDescription = string.Empty;
+                    if (Model.ControllerObjects != null)
+                    {
+                        moduleDescription = Model.ControllerObjects.Where(c => c.Name == Model.RolePermissions[index].ModuleName).Select(c => c.Description).FirstOrDefault();    
+                    }
+                    
+                }
+                <label>@Html.DisplayFor(modelItem => moduleDescription)</label>
+            </span>
+        </div>
+        <div class="card-tools mr-5 " style="line-height:40px">
+            <div class="form-group mb-0">
+                <div class="icheck-success d-inline mr-5">
+                    <input type="checkbox" asp-for="@Model.RolePermissions[index].IsCreateAccess" />
+                    <label asp-for="@Model.RolePermissions[index].IsCreateAccess">
+                        Create
+                    </label>
+                </div>
+                <div class="icheck-success d-inline mr-5">
+                    <input type="checkbox" asp-for="@Model.RolePermissions[index].IsReadAccess" />
+                    <label asp-for="@Model.RolePermissions[index].IsReadAccess">
+                        Read
+                    </label>
+                </div>
+                <div class="icheck-success d-inline mr-5">
+                    <input type="checkbox" asp-for="@Model.RolePermissions[index].IsUpdateAccess" />
+                    <label asp-for="@Model.RolePermissions[index].IsUpdateAccess">
+                        Update
+                    </label>
+                </div>
+                <div class="icheck-success d-inline mr-5">
+                    <input type="checkbox" asp-for="@Model.RolePermissions[index].IsDeleteAccess" />
+                    <label asp-for="@Model.RolePermissions[index].IsDeleteAccess">
+                        Delete
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+}

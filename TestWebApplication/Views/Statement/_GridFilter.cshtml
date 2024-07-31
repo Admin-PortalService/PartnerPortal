@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.item_statement>
+
+<div class="row mb-2">
+    <div class="col-sm-6" style="color: #169D53">
+        <h4>Outstanding Value : @ViewBag.TotalAmount</h4>
+    </div>
+</div>
+
+
+<table id="example1" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Document Type</th>
+            <th>Reference No.</th>
+            <th>Item Name</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Remark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.statement.DocType</td>
+                <td>@item.statement.Ref</td>
+                <td>@item.item.ItemName</td>
+                <td>@item.item.ItemDes</td>
+                <td>@item.Amount</td>
+                <td>@item.item.Remark</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

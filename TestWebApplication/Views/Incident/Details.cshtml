@@ -1,0 +1,151 @@
+﻿@*using System.Collections.Generic.IEnumerable`1[TestWebApplication.Models.ViewModels.Comment*@
+@model TestWebApplication.Models.ViewModels.Incident
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+
+    <title>Incident Details</title>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <a asp-action="IndexIncident" class="btn btn-outline-primary">Back</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Incident" asp-action="Index">Index</a></li>
+                            <li class="breadcrumb-item active">Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- / .container fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                @*<div id="mainElement">*@
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Incident - Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.IssueID)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.IssueID)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.IssueTitle)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.IssueTitle)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Category)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Category)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Priority)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Priority)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Status)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ModuleID)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ModuleID)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.CreatedOn)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.CreatedOn)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.CreatedBy)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ModifiedOn)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ModifiedBy)
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="IndexIncident" class="btn btn-outline-primary mr-1">Cancel</a>
+                        <a asp-action="Edit" asp-controller="Incident" asp-route-id="@Model.IssueID" class="btn  btn-info float-right">  Edit  </a>
+                        </div>
+                         </div>
+                    </div>
+                     </section>
+            <!-- Comment -->
+            <div class="container-fluid">
+            <form asp-action="Comment" method="post">
+                    <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Comment</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="IssueID">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" name="Subject" placeholder="Subject" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                             <div class="col-sm-12">
+                                 <textarea class="form-control" rows="5" placeholder="Add Comment here.." name="CmtMsg" required></textarea>
+                                @*<input type="text" class="form-control" name="CmtMsg" placeholder="Add Comment here.." required>*@
+                            </div>
+                                
+                        </div>
+                            <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                    </div>
+                    <div class="card-footer">
+                            <button type="submit" class="btn btn-info float-right">Send Message</button>
+                        @*<a asp-action="Comment" asp-controller="Incident" asp-route-id="@Model.IssueID" class="btn btn-primary float-right">Send Message</a>*@
+                    </div>
+                </div>
+            </form>
+            </div>
+        <!--All Comment -->
+            <section class="content">
+                    <div class="container-fluid">
+                <partial name="_CommentPartial" asp-for="IssueID">
+                    </div>
+            </section>
+           
+       
+    </div>
+</body>
+</html>

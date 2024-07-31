@@ -1,0 +1,99 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.Assign>
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html lang="en">
+<head>
+</head>
+<body class="hold-transition sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1> Assign To Me</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active"> AssignToMe</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    
+
+    <section class="content">
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-hover">
+                <thead background="#17a2b8">
+                    <tr>
+                        <th><span>IssueID</span></th>
+                        <th><span>IssueTitle</span></th>
+                        <th><span>Category</span></th>
+                        <th><span>Priority</span></th>
+                        <th><span>Status</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in @ViewBag.IncList)
+                    {
+                        <tr>
+                            <td><a bgcolor="#000310" asp-controller="Incident" asp-action="Tab" asp-route-id="@obj.IssueID"> @obj.IssueID</a></td>
+                            <td> @obj.IssueTitle</td>
+                            <td> @obj.Category</td>
+                            <td>@obj.Priority</td>
+                            <td>@obj.Status</td>
+
+                        </tr>
+
+                    }
+                </tbody>
+               
+            </table>
+        </div>
+        <!-- /.card-body -->
+        @*<div class="container-fluid">
+            <!-- Timelime example  -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- The time line -->
+                    <div class="timeline">
+                        <!-- timeline time label -->
+                        <div class="time-label">
+                            <span>All Incidents</span>
+                        </div>
+                        <!-- /.timeline-label -->
+                        <!-- timeline item -->
+                         @foreach (var obj in @ViewBag.IncList)
+                                {
+                            <div>
+                                
+                                <i class="fas fa-envelope bg-white"></i> 
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fas fa-clock"></i> @obj.CreatedOn </span>
+                                     <h3 class="timeline-header">@obj.Status</h3>
+                                    <div class="timeline-body">
+                                        #@obj.IssueID @obj.IssueTitle
+                                    </div>
+                                    <div class="timeline-body">
+                                        Priority : @obj.Priority 
+                                    </div>
+                                    <div class="timeline-footer"><a class="btn btn-primary btn-sm" asp-controller="Incident" asp-action="DetailCmt" asp-route-id="@obj.IssueID">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>*@
+    </section>
+</body>
+</html>

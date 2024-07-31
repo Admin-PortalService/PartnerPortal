@@ -1,0 +1,162 @@
+﻿@model TestWebApplication.Models.ViewModels.Projects
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+    
+    <title>Create Project</title>
+   
+</head>
+<body class="hold-transition sidebar-mini">
+    <form asp-action="Create" method="post">
+        <div class="wrapper">
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Project Input </h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Projects" asp-action="Index">Index</a></li>
+                                <li class="breadcrumb-item active">Project Input</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            @if (@ViewBag.msgList != null)
+                @foreach (var msg in @ViewBag.msgList)
+                {
+                    {
+                        <div class="alert alert-warning alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                            @msg.ToString()
+                        </div>
+                    }
+                }
+
+            @if (@ViewBag.error != null)
+            {
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                    @ViewBag.error
+                </div>
+            }
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- SELECT2 EXAMPLE -->
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Project Form</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Project ID
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ProjectCode" data-placeholder="Project ID">
+                                </div>
+                            </div>
+                             <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Organization
+                                    <span class="text-danger">*</span>
+                                </label>
+                                 <div class="col-sm-10">
+                                    <select class="form-control" data-placeholder="Select Customer" name="CustomerID" asp-items="@(new SelectList(@ViewBag.CustomerList,"CustomerID","CustomerName"))" style="width: 100%;">
+                                    </select>
+                                 </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Project Name
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ProjectName" data-placeholder="Project Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Project Description
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ProjectDesc" data-placeholder="Project Description">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Project Status
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" data-placeholder="Select Project Status" name="PrjStatus" asp-items="@(new SelectList(@ViewBag.Status,"PrjStatus","PrjStatus"))">
+@*                                        <option value="@ViewBag.Status.Status" selected="selected"> @ViewBag.Status.Status</option>         
+*@                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Valid From
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control float-right" name="ValidFrom" data-placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Valid To
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control float-right" name="ValidTo" data-placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    Last Maintenance Contract Date
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control float-right" name="LastDate" placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+
+                <input type="hidden" name="CreatedBy" value="@User.Identity?.Name"  />
+                <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+            </section>
+            <!-- /.content -->
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-info float-right"> Save </button>
+        </div>
+        
+    </form>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+</body>
+</html>
+

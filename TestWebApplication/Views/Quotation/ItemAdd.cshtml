@@ -1,0 +1,271 @@
+﻿@model TestWebApplication.Models.ViewModels.Quotation
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<title>Create Quotation</title>
+
+<html>
+<head>
+    <title>Create Quotation</title>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <form asp-action="ItemAdd" method="post" enctype="multipart/form-data">
+        <div class="wrapper">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Create Quotation</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Quotation" asp-action="Index">Index</a></li>
+                                <li class="breadcrumb-item active">Create Quotation</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="content">
+                <div class="card-body">
+                    @if (@ViewBag.msgList != null)
+                    {
+                        @foreach (var msg in @ViewBag.msgList)
+                        {
+                            {
+                                <div class="alert alert-warning alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                    @msg.ToString()
+                                </div>
+                            }
+                        }
+                    }
+                    @if (@ViewBag.error != null)
+                    {
+                        <div class="alert alert-warning alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                            @ViewBag.error
+                        </div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4" asp-for="Organization"></label>
+                            <select class="col-md-7 custom-select" id="orgId" onchange="loadProject(this)" data-placeholder="Select Organization" name="Organization" asp-items="@(new SelectList(@ViewBag.CustomerList,"CustomerID","CustomerName"))" style="width: 100%;">
+                                <option>Please select Organization</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4" asp-for="Project"></label>
+                            <select class="col-md-7 custom-select" id="prjId" data-placeholder="Select Project" name="Project" asp-items="@(new SelectList(@ViewBag.ProjectList,"ProjectID","ProjectName"))" style="width: 100%;">
+                                <option>Please select Project</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-md-4" asp-for="QuotationType"></label>
+                            <input type="text" asp-for="QuotationType" class="col-md-7 custom-select" placeholder="Please enter Quotation Type">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-4" asp-for="Date"></label>
+                            <input type="date" asp-for="Date" class="col-md-7 custom-select" data-placeholder="dd-MMM-yyyy">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="col-md-3" asp-for="Desc"></label>
+                            <input type="text" asp-for="Desc" class="col-md-6 custom-select" placeholder="Please enter Description">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-info float-right">Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <hr />
+            <section class="content">
+                <div>
+
+                    <table id="tblItem" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">Item Id</th>
+                                <th>Item Name</th>
+                                <th>Item Description</th>
+                                <th>Amount</th>
+                                <th>Remark</th>
+                                <th>
+                                    <button id="btnAddDetailRow" type="button" class="btn btn-sm btn-secondary visible" onclick="AddItem(this)">
+                                        Add
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int i = 0; i < Model.ItemQuotation.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <select class="form-control" style="width: 100%;" asp-for="ItemQuotation[i].item.ItemId" asp-items="@(new SelectList(@ViewBag.ItemList,"ItemId","ItemName"))" onchange="GetSelectedValue(this)">
+                                            <option>Please select Item Name</option>
+                                        </select>
+                                        <span id="spanId_@i" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.ItemQuotation[i].item.ItemDes, new {htmlAttributes = new {@class = "form-control ItemDesc", @readonly = "readonly"}})
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.ItemQuotation[i].Amount, new {htmlAttributes = new {@class = "form-control", @onkeypress = "keypresshandle(event)"}})
+                                        <span id="spanAmount_@i" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.ItemQuotation[i].item.Remark, new {htmlAttributes = new {@class = "form-control ItemRemark", @readonly = "readonly"}})
+                                    </td>
+                                    <td>
+                                        <button id="btnremove_@i" type="button" class="btn btn-sm btn-danger visible" onclick="DeleteItem(this)">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </section>
+
+        </div>
+    </form>
+
+    @section Scripts {
+        <script type="text/javascript">
+
+            function DeleteItem(btn) {
+                var table = document.getElementById('tblItem');
+                var rows = table.getElementsByTagName('tr');
+                if (rows.length == 2) {
+                    alert("This row cannot be deleted!");
+                    return;
+                }
+
+                $(btn).closest('tr').remove();
+            }
+
+            function AddItem(btn) {
+                var length = $('input.ItemDesc').length;
+                for (var i = 0; i < length; i++) {
+                    var inputId = '#ItemQuotation_' + i + '__item_ItemId';
+                    var inputAmount = '#ItemQuotation_' + i + '__Amount';
+                    var spanAmount = 'spanAmount_' + i;
+                    var spanId = 'spanId_' + i;
+                }
+
+                if ($(inputId).val() == 'Please select Item Name') {
+                    document.getElementById(spanId).innerHTML = "Please Select Item Name";
+                    return false;
+                }
+                else
+                    document.getElementById(spanId).innerHTML = "";
+
+                if ($(inputAmount).val() == 0.00 || $(inputAmount).val() == 0) {
+                    document.getElementById(spanAmount).innerHTML = "Please enter amount";
+                    return false;
+                }
+                else
+                    document.getElementById(spanAmount).innerHTML = "";
+
+                var table = document.getElementById('tblItem');
+                var rows = table.getElementsByTagName('tr');
+                var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+                var lastRowIdx = rows.length - 2;
+                var nextRowIdx = eval(lastRowIdx) + 1;
+
+                rowOuterHtml = rowOuterHtml.replaceAll('_' + lastRowIdx + '_', '_' + nextRowIdx + '_');
+                rowOuterHtml = rowOuterHtml.replaceAll('[' + lastRowIdx + ']', '[' + nextRowIdx + ']');
+                rowOuterHtml = rowOuterHtml.replaceAll('_' + lastRowIdx, '_' + nextRowIdx);
+
+                var newRow = table.insertRow();
+                newRow.innerHTML = rowOuterHtml;
+
+                var x = document.getElementsByTagName('input');
+                for (var i = 0; i < x.length; i++) {
+                    if (x[i].type == "text" && x[i].id.indexOf('_' + nextRowIdx + '_') > 0)
+                        x[i].value = '';
+                    else if (x[i].type == "number" && x[i].id.indexOf('_' + nextRowIdx + '_') > 0)
+                        x[i].value = '';
+                }
+            }
+
+            //restrict plus sign, minus sign
+            function keypresshandle(evt) {
+                var char = String.fromCharCode(evt.which);
+
+                if (/[0-9]/.test(char) || char === '.') {
+                    return true;
+                }
+                else {
+                    evt.preventDefault();
+                    return false;
+                }
+            }
+
+            function GetSelectedValue(ItemId) {
+                var selectedItemId = ItemId.value;
+                
+                $.ajax({
+                    type: "POST",
+                    url: "/Quotation/GetItemDescAndRemark",
+                    data: { ItemId: selectedItemId },
+                    success: function (r) {
+                        var length = $('input.ItemDesc').length;
+                        var inputDesc;
+                        var inputRemark;
+
+                        for (var i = 0; i < length; i++) {
+                            inputDesc = '#ItemQuotation_' + i + '__item_ItemDes';
+                            inputRemark = '#ItemQuotation_' + i + '__item_Remark';
+                        }
+                        $(inputDesc).val(r.itemDes);
+                        $(inputRemark).val(r.remark);
+                    }
+                });
+
+            }
+
+            function loadProject(obj) {
+                var value = obj.value;
+                $.ajax({
+                    type: "POST",
+                    url: "/MeetingNote/GetProjectsByOrgId",
+                    data: { orgId: value },
+                    success: function (r) {
+                        $("#prjId").empty();
+                        $("#prjId").append("<option>Please select Project</option>")
+                        $.each(r, function (index, row) {
+                            $("#prjId").append("<option value='" + row.projectID + "'>" + row.projectName + "</option>")
+                        });
+                    }
+                });
+
+            }
+          
+        </script>
+    }
+
+</body>
+</html>

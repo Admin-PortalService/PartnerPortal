@@ -1,0 +1,760 @@
+﻿@model TestWebApplication.Models.ViewModels.Incident
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html lang="en">
+<head>
+
+    <title>Incident Form</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        .align-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Incident Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Incident" asp-action="IndexIncident">Index</a></li>
+                        <li class="breadcrumb-item active">Edit Incident</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-lg-12">
+            <div class="card card-primary card-outline card-tabs">
+                <div class="card-header p-0 pt-1 border-bottom-0">
+                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"> Incident Details </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-two-settings-tab" data-toggle="pill" href="#custom-tabs-two-settings" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Attachments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false"> Comments </a>
+                        </li>
+                        @if (ViewBag.IsInternal == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-two-internote-tab" data-toggle="pill" href="#custom-tabs-two-internote" role="tab" aria-controls="custom-tabs-two-internote" aria-selected="false"> Internal Note </a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill" href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages" aria-selected="false">Solutions </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-two-sla-tab" data-toggle="pill" href="#custom-tabs-two-sla" role="tab" aria-controls="custom-tabs-two-sla" aria-selected="false">SLA History</a>
+                        </li>
+                        @if (ViewBag.hasBreached == true)
+                        {
+                            <li class="nav-item align-right">
+                                <span class="text-danger">This ticket has breached SLA Time.</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                @if (ViewBag.msg != null)
+                {
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                        <h4>
+                            <i class="fas fa-check-circle"></i>
+                            @ViewBag.msg
+                        </h4>
+                    </div>
+                }
+
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-two-tabContent">
+                        <!-- Incident Details -->
+                        <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                            <form asp-action="Tab" method="post">
+                                <section class="content">
+                                    <div class="container-fluid">
+                                        @foreach (var item in @ViewBag.Incident)
+                                        {
+                                            <!-- SELECT2 EXAMPLE -->
+                                            <div class="card card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Incident Category</h3>
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label for="IssueID" class="col-sm-2 col-form-label">Issue ID</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" asp-for="IssueID" value="@item.IssueID" name="IssueID" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="IssueTitle" class="col-sm-2 col-form-label">Issue Title</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" asp-for="IssueTitle" value="@item.IssueTitle" name="IssueTitle" data-placeholder="Give the issue a title">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Issue Category</label>
+                                                        <div class="col-sm-10">
+                                                            <select class="form-control" style="width: 100%;" data-placeholder="Select Issue Category" name="Category">
+                                                                <option value="@ViewBag.IssueType.IssueTypeName" selected="selected" asp-for="@ViewBag.IssueType.IssueTypeName" name="Category"> @ViewBag.IssueType.IssueTypeName</option>
+                                                                @foreach (var issue in ViewBag.IssueList)
+                                                                {
+                                                                    <option value="@issue.IssueTypeName" asp-for="@issue.IssueTypeName" name="Category"> @issue.IssueTypeName </option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="card card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Project and Module</h3>
+
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Project</label>
+                                                        <div class="col-sm-10">
+                                                            <select class="form-control" style="width: 100%;" data-placeholder="Select Project" name="ProjectID">
+                                                                <option value="@ViewBag.ProjectName.ProjectID" selected="selected"> @ViewBag.ProjectName.ProjectName</option>
+                                                                @foreach (var Prj in ViewBag.ProjectList)
+                                                                {
+                                                                    <option value="@Prj.ProjectID"> @Prj.ProjectName </option>
+                                                                }
+                                                            </select>
+                                                            @*<input type="text" class="form-control" value="@item.ProjectID" name="@item.ProjectID" readonly>*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Module</label>
+                                                        <div class="col-sm-10">
+                                                            <select class="form-control" style="width: 100%;" data-placeholder="Select Module" name="ModuleID">
+                                                                <option value="@ViewBag.ModuleName.ModuleID" selected="selected"> @ViewBag.ModuleName.ModuleDesc</option>
+                                                                @foreach (var Mod in ViewBag.ModuleList)
+                                                                {
+                                                                    <option value="@Mod.ModuleID"> @Mod.ModuleDesc </option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Priority and Status</h3>
+
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Priority</label>
+                                                        <div class="col-sm-10">
+                                                            <select class="form-control" style="width: 100%;" data-placeholder="Select Priority" name="Priority" readonly="true">
+                                                                <option value="@ViewBag.Priority.Priority" selected="selected"> @ViewBag.Priority.PriorityDesc</option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Status</label>
+                                                        <div class="col-sm-10">
+                                                            @if (@ViewBag.IsReporter == 1)
+                                                            {
+                                                                <select class="form-control" style="width: 100%;" data-placeholder="Select Status" name="Status" disabled="disabled">
+                                                                    <option value="@ViewBag.Status.IncidentStatus" selected="selected"> @ViewBag.Status.IncidentStatus</option>
+                                                                </select>
+                                                            }
+                                                            @if (@ViewBag.IsReporter == 0)
+                                                            {
+                                                                <select class="form-control" style="width: 100%;" data-placeholder="Select Status" name="Status">
+                                                                    <option value="@ViewBag.Status.IncidentStatus" selected="selected"> @ViewBag.Status.IncidentStatus</option>
+                                                                    @foreach (var Sts in ViewBag.StatusList)
+                                                                    {
+                                                                        <option value="@Sts.IncidentStatus"> @Sts.IncidentStatus </option>
+                                                                    }
+                                                                </select>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- adding "Alternate Contact Details"-->
+                                            <div class="card card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Alternate Contact Details</h3>
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 col-form-label">Alternate Contact Name</label>
+                                                        <label class="col-sm-4 col-form-label">Alternate Contact Phone</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="AltContact" asp-for="AltContact" value="@item.AltContact">
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <input type="number" class="form-control" name="AltPhone" asp-for="AltPhone" value="@item.AltPhone">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Alternate Contact Email</label> @* i class="fa fa-question-circle"></i> *@
+                                                        <div class="col-sm-12">
+                                                            <input type="text" class="form-control" name="AltEmail" asp-for="AltEmail" value="@item.AltEmail">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--adding alternate contact-->
+                                            <div class="card card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Path and Description</h3>
+
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">AreaPath</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" value="@item.AreaPath" name="AreaPath" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Description</label>
+                                                        <div class="col-sm-10">
+                                                            @*<input type="text" class="form-control" rows="5" value="@item.DetailDesc" name="DetailDesc">*@
+                                                            @*<textarea class="form-control" placeholder="Place some text here" name="DetailDesc" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px; display: none;"></textarea>*@
+                                                            <textarea class="form-control" id="editor" placeholder="Enter Detail Description here..." name="DetailDesc" required>@item.DetailDesc</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Attachment</h3>
+
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Attachment </label>
+                                                        <div class="col-sm-10">
+                                                            @foreach (var att in ViewBag.Attachment)
+                                                            {
+                                                                <input type="text" class="form-control" value="@att.AttachName" name="UploadFile" disabled />
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <input type="hidden" value="@item.CreatedBy" name="CreatedBy" />
+                                            <input type="hidden" value="@item.CreatedOn" name="CreatedOn" />
+                                            <input type="hidden" value="@item.ActualDate" name="ActualDate" />
+                                            <input type="hidden" value="@item.HasBreached" name="HasBreached" />
+                                            <input type="hidden" value="@item.PauseStart" name="PauseStart" />
+                                            <input type="hidden" value="@item.PauseEnd" name="PauseEnd" />
+                                            <input type="hidden" value="@item.PauseDuration" name="PauseDuration" />
+                                            <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+                                            <input type="hidden" name="ModifiedOn" value="@item.ModifiedOn" />
+                                            <input type="hidden" value="@item.Assignee" name="Assignee" />
+                                            @if (@item.Assignee == null)
+                                            {
+                                                <input type="hidden" value="false" name="IsAssigned" />
+                                            }
+                                            @if (@item.Assignee != null)
+                                            {
+                                                <input type="hidden" value="true" name="IsAssigned" />
+                                            }
+
+                                        }
+                                    </div>
+
+                                </section>
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-info float-right">Save</button>
+                                </div>
+
+                            </form>
+                        </div>
+                        <!-- Attachment -->
+                        <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
+
+                            <form asp-action="Attach" method="post" enctype="multipart/form-data">
+                                <div class="container-fluid">
+                                    @foreach (var item in ViewBag.Incident)
+                                    {
+                                        <div class="card card-info">
+
+                                            <div class="card-header">
+                                                <h3 class="card-title">Add Attachment</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <input type="hidden" name="IssueID" value="@item.IssueID" />
+                                                <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        @Html.Partial("_AddMorePartialView")
+                                                    </div>
+                                                </div>
+                                                <div id="addAddMoreDiv"></div>
+                                                <div class="form-group row">
+                                                    <a id="add_row" class="btn btn-primary float-right"> Add Rows</a>
+                                                    <br /> <br />
+                                                </div>
+                                                <h6>Allowed File Format : .xls,.xlsx,.doc,.docx,.ppt,.pptx,.pdf,.zip,.txt,.png,.jpg,.jpeg</h6><br />
+                                                <h6>Allowed Max FileSize(20MB).</h6>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button type="submit" class="btn btn-info float-right" id="btnSubmit" disabled>Submit</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </form>
+
+                            <section class="content">
+                                <div class="container-fluid">
+                                    <!-- Timelime example  -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- The time line -->
+                                            <div class="timeline">
+                                                <!-- timeline time label -->
+                                                <div class="time-label">
+                                                    <span>Attachment</span>
+                                                    <span>      <a class=" nav-icon fas fa-envelope" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">  </a></span>
+                                                </div>
+                                                <!-- /.timeline-label -->
+                                                <!-- timeline item -->
+                                                @foreach (var item in ViewBag.Attachment)
+                                                {
+                                                    <div>
+                                                        <i class="fas fa-file bg-green"></i>
+                                                        <div class="timeline-item">
+
+                                                            <a href="/Incident/DownloadFile?fileId=@item.AttachID" class="actionlinks" target="_blank">@item.AttachName</a>
+                                                            <div class="timeline-body">
+                                                                Uploaded by @item.CreatedBy on @item.CreatedOn.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+                        <!-- .comment -->
+                        <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                            <!-- Comment -->
+                            <form asp-action="Comment" method="post">
+                                <div class="container-fluid">
+                                    @foreach (var item in ViewBag.Incident)
+                                    {
+                                        <div class="card card-info">
+
+                                            <div class="card-header">
+                                                <h3 class="card-title">Add Comment</h3>
+                                            </div>
+
+                                            <div class="card-body">
+                                                <input type="hidden" name="IssueID" value="@item.IssueID" />
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <input type="text" class="form-control" name="Subject" placeholder="Subject" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <textarea class="form-control" id="editor" placeholder="Add Comment here.." name="CmtMsg">
+                                                            </textarea>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                                            </div>
+
+                                            <div class="card-footer">
+                                                <button type="submit" class="btn btn-info float-right">Add Comment</button>
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+
+                            </form>
+                            <section class="content">
+                                <div class="container-fluid">
+                                    <!-- Timelime example  -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- The time line -->
+                                            <div class="timeline">
+                                                <!-- timeline time label -->
+                                                <div class="time-label">
+                                                    <span>All Comments</span>
+                                                    <span>      <a class=" nav-icon fas fa-comment" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">  </a></span>
+                                                </div>
+                                                <!-- /.timeline-label -->
+                                                <!-- timeline item -->
+                                                @foreach (var item in ViewBag.Comment)
+                                                {
+                                                    <div>
+                                                        <i class="fas fa-comment bg-blue"></i>
+                                                        <div class="timeline-item">
+                                                            <span class="time"><i class="fas fa-clock"></i> @item.CreatedOn </span>
+                                                            <h3 class="timeline-header">
+                                                                #@item.CmtID. @item.CreatedBy commented.
+                                                            </h3>
+                                                            <div class="timeline-body">
+                                                                @item.Subject
+                                                            </div>
+
+                                                            <div class="timeline-body">
+                                                                @item.CmtMsg
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+                        <!-- Internal Note Tab -->
+                        <div class="tab-pane fade" id="custom-tabs-two-internote" role="tabpanel" aria-labelledby="custom-tabs-two-internote-tab">
+                            <form asp-action="InternalNote" method="post">
+                                <div class="container-fluid">
+                                    @foreach (var item in ViewBag.Incident)
+                                    {
+                                        <div class="card card-info">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Add Internal Note</h3>
+                                            </div>
+
+                                            <div class="card-body">
+                                                <input type="hidden" name="IssueID" value="@item.IssueID" />
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <input type="text" class="form-control" name="Subject" placeholder="Subject" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <textarea class="form-control" id="editor" placeholder="Add Internal Note here.." name="Note"></textarea>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                                            </div>
+
+                                            <div class="card-footer">
+
+                                                <button type="submit" class="btn btn-info float-right">Add Note</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                            </form>
+                            <section class="content">
+                                <div class="container-fluid">
+                                    <!-- Timelime example  -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- The time line -->
+                                            <div class="timeline">
+                                                <!-- timeline time label -->
+                                                <div class="time-label">
+                                                    <span>All Internal Note</span>
+                                                    <span>      <a class=" nav-icon fas fa-comment" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">  </a></span>
+                                                </div>
+                                                <!-- /.timeline-label -->
+                                                <!-- timeline item -->
+                                                @foreach (var item in ViewBag.InternalNote)
+                                                {
+                                                    <div>
+                                                        <i class="fas fa-comment bg-blue"></i>
+                                                        <div class="timeline-item">
+                                                            <span class="time"><i class="fas fa-clock"></i> @item.CreatedOn </span>
+                                                            <h3 class="timeline-header">
+                                                                #@item.InterNoteID. @item.CreatedBy noted.
+                                                            </h3>
+                                                            <div class="timeline-body">
+                                                                @item.Subject
+                                                            </div>
+
+                                                            <div class="timeline-body">
+                                                                @item.Note
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+                        <!-- Solultion Tab -->
+                        <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
+
+                            <form asp-action="Solution" method="post">
+                                <div class="container-fluid">
+                                    @foreach (var item in ViewBag.Incident)
+                                    {
+                                        <div class="card card-info">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Add Solution</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <input type="hidden" name="IssueID" value="@item.IssueID" />
+                                                <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <input type="text" class="form-control" name="SolTitle" placeholder="Solution Title" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <textarea class="form-control" id="editor" placeholder="Add Description here.." name="SolDesc"></textarea>
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group row">
+                                            <div class="col-sm-12">
+                                            <textarea class="form-control" id="editor" placeholder="Add Note here.." name="Note"></textarea>
+                                            </div>
+                                            </div>*@
+                                            </div>
+                                            <div class="card-footer">
+                                                <button type="submit" class="btn btn-info float-right">Add Solution</button>
+                                            </div>
+
+
+                                        </div>
+
+                                    }
+                                </div>
+
+                            </form>
+                            <section class="content">
+                                <div class="col-md-12">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-lightbulb"></i>
+                                        All Solutions
+                                    </h3>
+                                    <!-- /.card-header -->
+                                    <div class="card-body clearfix">
+                                        @foreach (var item in ViewBag.Solution)
+                                        {
+                                            <blockquote class="quote-secondary">
+                                                <cite title="Source Title"><p class="text-primary">#@item.SolutionID. @item.SolTitle</p></cite>
+                                                <p>@item.SolDesc</p>
+                                                @*<small>
+                                            <div class="row">
+                                            <div class="col-md-9">Note  @item.Note</div>*@  @*Note***@
+                                                @* <div class="col-md-3"> @item.CreatedBy <i class="fas fa-clock"></i> @item.CreatedOn  </div>
+                                            </div>
+                                            </small>*@
+                                            </blockquote>
+                                        }
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </section>
+                        </div>
+                        <!-- SLA History -->
+                        <div class="tab-pane fade" id="custom-tabs-two-sla" role="tabpanel" aria-labelledby="custom-tabs-two-sla-tab">
+                            <section class="content">
+                                <div class="col-md-12">
+                                    <table id="example1" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Issue ID</th>
+                                                <th>Status</th>
+                                                <th>Priority</th>
+                                                <th>Modified User</th>
+                                                <th>Created Date</th>
+                                                <th>Modified Date</th>
+                                                <th>SLA Duration</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in ViewBag.IncidentHistory)
+                                            {
+                                                <tr>
+                                                    <td>@item.IssueID</td>
+                                                    <td>@item.Status</td>
+                                                    <td>@item.Priority</td>
+                                                    <td>@item.UserName</td>
+                                                    <td>@item.CreatedOn</td>
+                                                    <td>@item.ModifiedOn</td>
+                                                    @{
+                                                        string time;
+                                                        DateTime? createdOn = @item.CreatedOn;
+                                                        DateTime? modifiedOn = @item.ModifiedOn;
+                                                        if (modifiedOn.HasValue)
+                                                        {
+                                                            TimeSpan ts = modifiedOn.Value - createdOn.Value;
+                                                            time = string.Format("{0} D : {1} hr : {2} min : {3} sec", ts.Days, ts.Hours, ts.Minutes, ts.Seconds);
+                                                        }
+                                                        else
+                                                        {
+                                                            time = "-";
+                                                        }
+                                                    }
+                                                    <td>@time</td>
+
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <!-- /.card -->
+                            </section>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $('#add_row').on('click', function () {
+            var file = $("#UploadFile").val();
+
+            if (file == "") {
+                alert("Please select file");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("AddMorePartialView", "Incident")',
+                type: 'GET',
+                data: {
+                },
+                success: function (result) {
+                    $('#addAddMoreDiv').append(result);
+                },
+                error: function () {
+                }
+            });
+        });
+    </script>
+
+    <script src="~/js/tinymce/tinymce.min.js"></script>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea#editor',
+            height: 250,
+            promotion: false,
+            plugins: 'image link media table lists help',
+            toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | insertfile | link image media | fontsize ',
+            //enable title field in the Image dialog
+            image_title: true,
+            //enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            //add custom filepicker only to Image dialog
+            file_picker_types: 'file image media',
+            file_picker_callback: function (callback, value, meta) {
+                // Create a custom file picker dialog and trigger an AJAX request to upload the file.
+                // Implement your file picker logic here.
+                const input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', '.*');
+                input.onchange = function () {
+                    const file = input.files[0];
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    // Send an AJAX request to upload the file to the server.
+                    fetch('/api/files/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Insert the uploaded file into the TinyMCE editor using callback.
+                            callback(data.url, { text: file.name });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                };
+                input.click();
+            },
+
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            //insertfile_file_types: 'pdf doc docx xlsx',
+            //insertfile_max_size: '500mb',
+        });
+
+
+    </script>
+}
+</html>

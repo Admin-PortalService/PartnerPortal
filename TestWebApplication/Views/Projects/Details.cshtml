@@ -1,0 +1,115 @@
+﻿@*using TestWebApplication.Models.ViewModels;*@
+@model TestWebApplication.Models.ViewModels.Projects
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+
+    <title>Project Details</title>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <a asp-action="Index" class="btn btn-outline-primary">Back</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Projects" asp-action="Index">Index</a></li>
+                            <li class="breadcrumb-item active">Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- / .container fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div id="mainElement">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Project - Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">                              
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ProjectName)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ProjectName)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Organization
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @ViewBag.Organization.CustomerName
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ProjectDesc)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ProjectDesc)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Status)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ValidFrom)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ValidFrom)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ValidTo)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ValidTo)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.CreatedOn)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.CreatedOn)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.CreatedBy)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ModifiedOn)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ModifiedBy)
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Index" class="btn btn-outline-primary mr-1">Cancel</a>
+                            <a asp-action="Edit" asp-controller="Projects" asp-route-id="@Model.ProjectID" class="btn btn-primary float-right">Edit</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

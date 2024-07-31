@@ -1,0 +1,255 @@
+﻿@model TestWebApplication.Models.ViewModels.Incident
+@using Microsoft.AspNetCore.Identity
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+    
+    <title>Edit Incident</title>
+    
+</head>
+<body class="hold-transition sidebar-mini">
+    <form asp-action="Edit" method="post">
+        <div class="wrapper">
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Incident Form</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Incident" asp-action="IndexIncident">Index</a></li>
+                                <li class="breadcrumb-item active">Incident Form</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- SELECT2 EXAMPLE -->
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Incident Category</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="IssueID" class="col-sm-2 col-form-label">Issue ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="IssueID" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="IssueTitle" class="col-sm-2 col-form-label">Issue Title</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="IssueTitle" data-placeholder="Give the issue a title">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Issue Category</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" disabled="disabled" data-placeholder="Select Category" asp-for="Category">
+                                        <option selected="selected">@Model.Category</option>
+                                    </select>
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Project and Module</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Project</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" disabled="disabled" data-placeholder="Select Project" asp-for="ProjectID">
+                                        <option selected="selected">@Model.ProjectID</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Module</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" disabled="disabled" data-placeholder="Select Module" asp-for="ModuleID" >
+                                        <option selected="selected">@Model.ModuleID</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Priority and Status</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Priority</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" asp-for="Priority">
+                                        <option value="Urgent">Urgent</option>
+                                        <option value="Critical">Critical</option>
+                                        <option value="High">High</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Low">Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Status</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" asp-for="Status" onChange="combo(this, 'Status')">
+                                        <option value="Open">Open</option>
+                                        <option value="InProgress">InProgress</option>
+                                        <option value="Complete">Resolved</option>
+                                        <option value="Cancel">Cancel</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Path and Description</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">AreaPath</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="AreaPath" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5" asp-for="DetailDesc"></textarea>
+                                    @*<textarea class="form-control" placeholder="Place some text here" name="DetailDesc" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px; display: none;"></textarea>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Attachment</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Attachment </label>
+                                <div class="col-sm-10">
+                                    @*<i class="fa fa-folder-open"></i>
+                                   <input type="file" asp-for="UploadFile" id="UploadFile" accept=".×ls,.xlsx,.doc,.docx,.ppt,.pptx,application/pdf,.pdf,.zip" disabled/>*@
+                                    <input type="text" class="form-control" asp-for="UploadFile" disabled />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="hidden" asp-for="UploadFile"/>
+                    <input type="hidden" asp-for="CreatedBy" />
+        <input type="hidden" asp-for="CreatedOn" />
+        <input type="hidden" asp-for="ModifiedBy" value="@User.Identity?.Name" />
+        <input type="hidden" asp-for="ModifiedOn" />
+
+        </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-info float-right">Submit</button>
+        </div>
+
+    </form>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).on('change', '#UploadFile', function (e) {
+            if (e.target.files[0] != null) {
+                documentFile_CheckUploadFile();
+            }
+        });
+        function showErrorModel(errorMessage) {
+            $("#UploadFile").val('');
+            $('#error-modal #error-modal-message').text(errorMessage);
+            $('#error-modal').modal('show');
+        }
+
+        function documentFile_CheckUploadFile() {
+            var inputFieldId = "UploadFile";
+            var file = document.getElementById(inputFieldId).files[0];
+            var formData = new FormData();
+            formData.append(inputFieldId, file);
+
+            $.ajax({
+                type: "POST",
+                url: '/Incident/CheckUploadDocumentFile',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.message == "TooManyFiles") {
+                        showErrorModel("Please select a single file only!");
+                        $("#UploadFile").val('');
+                    }
+                    else if (data.message == "InvalidFileExtension") {
+                        showErrorModel("Invalid File Upload.");
+                        $("#UploadFile").val('');
+                    }
+                    else if (data.message == "Error") {
+                        showErrorModel(data.d.errorMessage);
+                        $("#UploadFile").val('');
+                    }
+                    else if (data.message == "Success") {
+                        //$ ("#TagStringDownload").val(file);
+                        $("#btnSubmit").prop("disabled", false);
+                    }
+                    else if (data.message == "FileSize") {
+                        $("#UploadFile").val('');
+                        showErrorModel("File size is too large. Allowed Max FileSize (20MB).");
+                    }
+                },
+
+                error: function (response) {
+                    showErrorModel(response);
+                }
+            });
+        }
+    </script>
+    
+
+</body>
+</html>

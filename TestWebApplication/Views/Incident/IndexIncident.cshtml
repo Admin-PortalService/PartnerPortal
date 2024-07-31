@@ -1,0 +1,271 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.Incident>
+
+   @{
+
+       Layout = "_AdminLTE";
+}
+
+<html lang="en">
+<head>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Incident Data</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">Incident Data</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Incident
+                        </h3>
+                        <h6> <a asp-action="Create" asp-controller="Incident" class="btn  btn-info float-right">  Create  </a></h6>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-header">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Project</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="prjId" data-placeholder="Select Project" name="Project" asp-items="@(new SelectList(@ViewBag.ProjectList,"ProjectID","ProjectName"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td>Module</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="moduleId" data-placeholder="Select Module" name="Module" asp-items="@(new SelectList(@ViewBag.ModuleList,"ModuleID","ModuleName"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td>Category</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="issueName" data-placeholder="Select Category" name="Category" asp-items="@(new SelectList(@ViewBag.IssueList,"IssueTypeName","IssueTypeName"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td>Priority</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="priority" data-placeholder="Select Priority" name="Priority" asp-items="@(new SelectList(@ViewBag.PriorityList,"Priority","Priority"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td>Status</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="status" data-placeholder="Select Status" name="IncidentStatus" asp-items="@(new SelectList(@ViewBag.StatusList,"IncidentStatus","IncidentStatus"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Created By</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="createdName" data-placeholder="Select Created By" name="CreatedBy" asp-items="@(new SelectList(@ViewBag.UserList,"UserName","UserName"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td>From Date</td>
+                                    <td style="padding-right: 15px;">
+                                        <input type="date" class="form-control float-right" id="fromDate" data-placeholder="dd-MMM-yyyy">
+                                    </td>
+                                    <td>To Date</td>
+                                    <td style="padding-right: 15px;">
+                                        <input type="date" class="form-control float-right" id="toDate" data-placeholder="dd-MMM-yyyy">
+                                    </td>
+                                    <td>Issue ID</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="issueId" data-placeholder="Select IssueID" name="IssueID" asp-items="@(new SelectList(@ViewBag.IncidentList,"IssueID","IssueID"))">
+                                            <option></option>
+                                        </select>
+                                    </td>                                   
+                                    <td></td>
+                                    <td style="padding-right: 15px;"></td>
+                                    <td style="padding-right: 15px;">
+                                        <button type="submit" class="btn btn-info float-right" onclick="Filtering(this)">Filter</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-body">
+                        <table id="example3" class="table table-bordered table-hover">
+                            <thead background="#17a2b8">
+                                <tr>
+                                    <th><span>IssueID</span></th>
+                                    <th><span>IssueTitle</span></th>
+                                    <th><span>Project</span></th>
+                                    <th><span>Module</span></th>
+                                    <th><span>Category</span></th>
+                                    <th><span>Priority</span></th>
+                                    <th><span>Status</span></th>
+                                    <th><span>Created By</span></th>
+                                    <th><span>Created On</span></th>
+                                    <th><span>Pause Duration</span></th>
+                                    <th><span>Has Breached</span></th>
+                                    <th><span>Actual Breached Time</span></th>
+                                    <th><span>SLA Date&Time</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var obj in @ViewBag.IncidentList)
+                                {
+                                    <tr>
+                                        <td><a bgcolor="#000310" asp-action="Tab" asp-route-id="@obj.IssueID"> @obj.IssueID</a></td>
+                                        <td> @obj.IssueTitle</td>
+                                        <td>
+                                            @foreach (var prj in @ViewBag.project)
+                                            {
+                                                if (@obj.ProjectID == @prj.ProjectID)
+                                                {
+                                                    @prj.ProjectName
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @foreach (var mod in @ViewBag.module)
+                                            {
+                                                if (@obj.ModuleID == @mod.ModuleID)
+                                                {
+                                                    @mod.ModuleDesc
+                                                }
+                                            }
+                                        </td>
+                                        <td> @obj.Category</td>
+                                        <td>@obj.Priority</td>
+                                        <td>@obj.Status</td>
+                                        <td> @obj.CreatedBy</td>
+                                        <td>@obj.CreatedOn</td>
+                                        <td>@obj.PauseDuration</td>
+                                        <td>@obj.HasBreached</td>
+                                        <td>@obj.ActualDate</td>
+                                        <td>@obj.SLADate</td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+      <!-- /.row -->
+    </section>
+    
+    @section Scripts {
+        <script type="text/javascript">
+            function Filtering(data) {
+                var module = $("#moduleId").val();
+                var prj = $("#prjId").val();
+                var issue = $("#issueName").val();
+                var priority = $("#priority").val();
+                var status = $("#status").val();
+                var created = $("#createdName").val();
+                var fromDate = $("#fromDate").val();
+                var toDate = $("#toDate").val();
+                var issueId = $("#issueId").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Incident/GetIncidentList",
+                    data: {
+                        ModuleId: module,
+                        PrjId: prj,
+                        Issue: issue,
+                        Priority: priority,
+                        Status: status,
+                        Createdby: created,
+                        FromDate: fromDate,
+                        ToDate: toDate,
+                        IssueId: issueId
+                    },
+                    success: function (r) {
+                        var table = $('#example3').DataTable();
+                        table.clear().destroy(); // Clear existing data and destroy DataTable
+                        if (r.incidentList.length > 0) {
+                            for (var i = 0; i < r.incidentList.length; i++) {
+                                var obj = r.incidentList[i];
+                                
+                                var projectDesc = "";
+                                for (var j = 0; j < r.projectData.length; j++) {
+                                    if (obj.projectID === r.projectData[j].projectID) {
+                                        projectName = r.projectData[j].projectName;
+                                        break;
+                                    }
+                                }
+                                var moduleDesc = "";
+                                for (var j = 0; j < r.moduleData.length; j++) {
+                                    if (obj.moduleID === r.moduleData[j].moduleID) {
+                                        moduleDesc = r.moduleData[j].moduleDesc;
+                                        break;
+                                    }
+                                }
+                                                               
+                                var createdDate = new Date(obj.createdOn);
+                                var formatcreatedDate = createdDate.toLocaleString();
+
+                                var actualDate = new Date(obj.actualDate);
+                                var formatactualDate = actualDate.toLocaleString();
+
+                                var row = "<tr>" +
+                                    "<td><b><a href='/Incident/Tab/" + obj.issueID + "'>" + obj.issueID + "</a></b></td>" +
+                                    "<td>" + obj.issueTitle + "</td>" +
+                                    "<td>" + projectName + "</td>" +
+                                    "<td>" + moduleDesc + "</td>" +
+                                    "<td>" + obj.category + "</td>" +
+                                    "<td>" + obj.priority + "</td>" +
+                                    "<td>" + obj.status + "</td>" +
+                                    "<td>" + obj.createdBy + "</td>" +
+                                    "<td>" + formatcreatedDate + "</td>" +
+                                    "<td>" + obj.pauseDuration + "</td>" + 
+                                    "<td>" + obj.hasBreached + "</td>" +   
+                                    "<td>" + formatactualDate + "</td>" + 
+                                    "<td>" + obj.slaDate + "</td>" +
+                                    "</tr>";
+
+                                $('#example3 tbody').append(row);
+                            }
+                        }
+                        //else {
+                        //    $('#example3 tbody').html("<tr><td colspan='8'>No data available</td></tr>");
+                        //}
+                        // Reinitialize DataTable with new data
+                        $('#example3').DataTable({
+                            "scrollX": true,
+                            "columnDefs": [
+                                { "width": "auto", "targets": 3 }
+                            ]
+                        });
+                    }
+                })
+            }
+        </script>
+    }
+
+</body>
+</html>
+
+

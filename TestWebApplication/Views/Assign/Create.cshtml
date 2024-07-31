@@ -1,0 +1,174 @@
+﻿@model TestWebApplication.Models.ViewModels.Assign
+
+@{
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+    <title>Incident Details</title>
+</head>
+
+<body>
+    <form asp-action="Create" method="post">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><strong> Assign Information</strong></h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Assign" asp-action="Index">Index</a></li>
+                            <li class="breadcrumb-item active">Assign</li>
+                        </ol>
+                        <br />
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <div class="row" style="margin:10px">
+            <div class="col-xs-8 col-sm-6">
+                <address>
+                    @* <h4><strong>Assign Information</strong><br /><br /></h4> *@
+                    <h6>
+                        Assign to:
+                        @foreach (var item in @ViewBag.Incident)
+                        {
+                            @if (item.IsAssigned == true)
+                            {
+                                <select class="form-control" style="width: 100%;" asp-for="UserID" asp-items="@(new SelectList(@ViewBag.assignList,"UserID","UserName"))">
+                                    <option value="@ViewBag.asignee.UserID">@ViewBag.asignee.UserName</option>
+                                </select>
+                            }
+                            @if (item.IsAssigned == false)
+                            {
+                                <select class="form-control" style="width: 100%;" asp-for="UserID" asp-items="@(new SelectList(@ViewBag.assignList,"UserID","UserName"))">
+                                    <option>Please select</option>
+                                </select>
+                            }
+                        }
+                    </h6>
+                </address>
+                <h6>Description</h6>
+                <input type="text" class="form-control" style="height: 50px;" asp-for="Description" placeholder="Enter description" value="@ViewBag.asignee?.Description" />
+                <br /><br />
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-info float-left">Assign</button>
+                </div>
+                <input type="hidden" name="AssignBy" value="@User.Identity?.Name" />
+            </div>
+            <div class="row">
+                @foreach (var obj in @ViewBag.IncidentDetails)
+                {
+                    <section class="content-header">
+                        @*
+                    <div class="col-xs-12">
+                    <div class="row mb-2">*@
+                        @*  <div class="col-sm-6">
+                    <h1>
+                    Incident
+                    <small>#@obj.IssueID</small>
+                    </h1>
+                    </div> *@
+                        @* <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Assign" asp-action="Index">Index</a></li>
+                    <li class="breadcrumb-item active">Assign</li>
+                    </ol>
+                    <br/>
+                    </div>
+                    <div class="row">
+                    <div class="col-xs-9">
+                    <h1>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </h1>
+                    </div>
+                    </div>
+                    </section> *@
+                        <div class=" col-xs-6 col-sm-3" style="margin:40px">
+                            <div class="container-fluid">
+                                <!-- info row -->
+                                <div class="row invoice-info">
+                                    <div class="col-xs-12 invoice-col">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="invoice">
+                        <div class="col-xs-9" style="margin:10px">
+                            <div class="container-fluid">
+                                <!-- info row -->
+                                <div class="row invoice-info">
+                                    <div class="col-xs-9 invoice-col">
+                                        <input type="hidden" asp-for="IssueID" value="@obj.IssueID" />
+                                        @* <div class="col-xs-8">
+                                    <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Assign" asp-action="Index">Index</a></li>
+                                    <li class="breadcrumb-item active">Assign</li>
+                                    </ol>
+                                    <br />
+                                    </div> *@
+                                        <address>
+                                            <h4> <strong>Incident Details</strong><br /></h4>
+                                            <h6>
+                                                ID     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; @obj.IssueID<br /><br />
+                                                Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; @obj.Status<br /><br />
+                                                Priority &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; @obj.Priority<br /><br />
+                                                Category &nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; @obj.Category<br /><br />
+                                                Module &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; @ViewBag.module.ModuleDesc<br /><br />
+                                                Project &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; @ViewBag.project.ProjectDesc <br /><br />
+                                                AssignTo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;
+                                                @foreach (var item in @ViewBag.Incident)
+                                                {
+                                                    if (item.IsAssigned == false)
+                                                    {
+                                                        <text><br /><br /></text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>@ViewBag.asignee.UserName</text>
+                                                    }
+                                                }
+                                                <br /><br />
+                                                Assign Mail&nbsp;&nbsp;: &nbsp;&nbsp;
+                                                @foreach (var item in @ViewBag.Incident)
+                                                {
+                                                    if (item.IsAssigned == false)
+                                                    {
+                                                        <text><br /><br /></text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>@ViewBag.asignee.UserMail</text>
+                                                    }
+                                                }
+
+
+                                            </h6>
+                                        </address>
+                                    </div>
+                                </div><!-- /.col -->
+                                <div class="col-sm-6 invoice-col"></div>
+                            </div>
+                        </div>
+
+                    </section>
+                }
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Index" class="btn btn-outline-primary mr-1 float-right">OK</a>
+        </div>
+
+    </form>
+
+</body>
+</html>

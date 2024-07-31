@@ -1,0 +1,98 @@
+{
+  "ControllerArray": [
+    {
+      "Name": "Incident",
+      "Description": "Incident"
+    },
+    {
+      "Name": "IncReport",
+      "Description": "Incident Report"
+    },
+
+    {
+      "Name": "Assign",
+      "Description": "Incident Assign"
+    },
+    {
+      "Name": "Customer",
+      "Description": "Customer"
+    },
+    {
+      "Name": "Projects",
+      "Description": "Projects"
+    },
+    {
+      "Name": "Module",
+      "Description": "Module"
+    },
+    {
+      "Name": "IssueType",
+      "Description": "Issue Type"
+    },
+    {
+      "Name": "Item",
+      "Description": "Item"
+    },
+    {
+      "Name": "Users",
+      "Description": "Users"
+    },
+    {
+      "Name": "UserAccess",
+      "Description": "User Details"
+    },
+    {
+      "Name": "Roles",
+      "Description": "Roles"
+    },
+    {
+      "Name": "RolePermission",
+      "Description": "Role Permission"
+    },
+    {
+      "Name": "Reseller",
+      "Description": "Reseller Program"
+    },
+    {
+      "Name": "AssitTools",
+      "Description": "Implementation Assist"
+    },
+    {
+      "Name": "Price",
+      "Description": "Price List"
+    },
+    {
+      "Name": "ProductVersion",
+      "Description": "Product Version"
+    },
+    {
+      "Name": "Campus",
+      "Description": "Cuscen Campus"
+    },
+    {
+      "Name": "Sale",
+      "Description": "Sale"
+    },
+    {
+      "Name": "Statement",
+      "Description": "Statement"
+    },
+    {
+      "Name": "Quotation",
+      "Description": "Quotation"
+    },
+    {
+      "Name": "MeetingNote",
+      "Description": "Meeting Note"
+    },
+    {
+      "Name": "Contract",
+      "Description": "Contract"
+    },
+    {
+      "Name": "SLAConfig",
+      "Description": "SLA Config"
+    }
+
+  ] 
+}

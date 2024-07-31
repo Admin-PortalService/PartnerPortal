@@ -1,0 +1,20 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.MeetingNote>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Meeting Title</th>
+            <th>Meeting Date</th>          
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><a asp-action="Edit" asp-route-id="@item.MeetingNoteId">@item.Title</a></td>
+                <td>@item.Date</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

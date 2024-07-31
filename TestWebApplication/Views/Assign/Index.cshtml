@@ -1,0 +1,229 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.Assign>
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html lang="en">
+<head>
+</head>
+<body class="hold-transition sidebar-mini">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                    <h1> Incident Assign</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active"> Incident Assign</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>      
+<!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header no-padding">
+                        <h5 class="box-title">All Incidents</h5>
+                    </div><!-- /.box-header -->
+                    <div class="row">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Module</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="moduleId" data-placeholder="Select Module" name="Module" asp-items="@(new SelectList(@ViewBag.ModuleList,"ModuleID","ModuleName"))" >
+                                            <option></option>
+                                        </select>
+                                    </td>
+
+                                    <td>Project</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="prjId" data-placeholder="Select Project" name="Project" asp-items="@(new SelectList(@ViewBag.ProjectList,"ProjectID","ProjectName"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                
+                                    <td>Assigned</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="assignType" name="AssgType" autocomplete="off" required>
+                                            <option value=null selected></option>
+                                            <option value="false">Unassign</option>
+                                            <option value="true">Assigned</option>
+                                        </select>
+                                    </td>
+
+                                    <td>Status</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="Status" data-placeholder="Select Status" name="IncidentStatus" asp-items="@(new SelectList(@ViewBag.StatusList,"IncidentStatus","IncidentStatus"))">
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                   
+                                    <td>Priority</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="priority" data-placeholder="Select Priority" name="Priority" asp-items="@(new SelectList(@ViewBag.PriorityList,"Priority","Priority"))" >
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>From Date</td>
+                                    <td style="padding-right: 15px;">
+                                        <input type="date" class="form-control float-right" id="fromDate" data-placeholder="dd-MMM-yyyy">
+                                    </td>
+                                    <td>To Date</td>
+                                    <td style="padding-right: 15px;">
+                                        <input type="date" class="form-control float-right" id="toDate" data-placeholder="dd-MMM-yyyy">
+
+                                    </td>
+                                    <td>Issue ID</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="issueid" data-placeholder="Select IssueID" name="IssueID" asp-items="@(new SelectList(@ViewBag.Incident,"IssueID","IssueID"))" >
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td>Assignee</td>
+                                    <td style="padding-right: 15px;">
+                                        <select class="form-control" id="assign" data-placeholder="Select Assignee" name="Assignee" asp-items="@(new SelectList(@ViewBag.AssigneeList,"UserName","UserName"))" >
+                                            <option></option>
+                                        </select>
+                                    </td>
+                                    <td style="padding-right: 15px;">
+                                        <button type="submit" class="btn btn-info float-right" onclick="Filtering(this)">Filter</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <br />
+                    <div class="card-body p-0">
+                        <table id="example1"  class="table table-bordered table-hover">
+                            <thead>             
+                                <tr>
+                                    <th>IssueID</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Reported by</th>
+                                    <th>Assigned</th>
+                                    <th>Assign To</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                                @foreach (var obj in @ViewBag.Incident)
+                            {
+                            <tr>
+                                <td>
+                                    <b><a asp-action="Create" asp-route-id="@obj.IssueID">@obj.IssueID</a></b>
+
+                                    @*@if (@obj.IsAssigned == true)
+                                    {
+                                        <b> <a asp-action="AssignTo" asp-route-id="@obj.IssueID">@obj.IssueID</a></b>
+                                    }
+                                    @if (@obj.IsAssigned == false)
+                                    {
+                                        <b><a asp-action="Create" asp-route-id="@obj.IssueID">@obj.IssueID</a></b>
+                                    } *@
+                                </td>
+                                <td> @obj.IssueTitle</td>
+                                <td> @obj.Status</td>
+                                <td>@obj.Priority</td>
+                                <td>@obj.CreatedBy</td>
+                                <td>
+                                @if (@obj.IsAssigned == true){
+                                    <b>Assigned</b>
+                                }
+                                 @if (@obj.IsAssigned == false){
+                                     <b>Unassign</b>
+                                }
+                                </td>
+
+                                <td>@obj.Assignee</td>
+                                <td>@obj.Description</td>
+                            </tr>
+                            }
+                        </tbody>
+                        </table>
+                        </div> <!-- /.body -->
+                    </div> <!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section><br/>
+
+    @section Scripts {
+        <script type="text/javascript">
+            function Filtering(data) {
+                var module = $("#moduleId").val();
+                var prj = $("#prjId").val();
+                var prior = $("#priority").val();
+                // var issue = $("#IssueType").val();
+                var stat = $("#Status").val();
+                var creby = $("#CreatedBy").val();
+                var isid = $("#issueid").val();
+                var assg = $("#assign").val();
+                var fd = $("#fromDate").val();
+                var td = $("#toDate").val();
+                var assgty = $("#assignType").val();
+                
+                    $.ajax({
+                        type: "POST",
+                        url: "/Assign/GetAssignList",
+                        data: {
+                            ModuleId: module,
+                            PrjId: prj,
+                            priority: prior,
+                            // IssueType:issue,
+                            Status: stat,
+                            CreatedBy: creby,
+                            issueid: isid,
+                            assign: assg,
+                            fromDate: fd,
+                            toDate: td,
+                            assignType: assgty
+                        },
+                        success: function (r) {
+                            var table = $('#example1').DataTable();
+                            table.clear().destroy(); // Clear existing data and destroy DataTable
+                            if (r.length > 0) {
+                                for (var i = 0; i < r.length; i++) {
+                                    var obj = r[i];
+                                    var row = "<tr>" +
+                                        "<td><b><a href='/Assign/Create/" + obj.issueID + "'>" + obj.issueID + "</a></b></td>" +
+                                        "<td>" + obj.issueTitle + "</td>" +
+                                        "<td>" + obj.status + "</td>" +
+                                        "<td>" + obj.priority + "</td>" +
+                                        "<td>" + obj.createdBy + "</td>" +
+                                        "<td>" + (obj.isAssigned ? "<b>Assigned</b>" : "<b>Unassign</b>") + "</td>" +
+                                        "<td>" + obj.assignee + "</td>" +
+                                        "<td>" + obj.description + "</td>" +
+                                        "</tr>";
+
+                                    $('#example1 tbody').append(row);
+                                }
+                            } //else {
+                                //$('#example1 tbody').html("<tr><td colspan='8'>No data available</td></tr>");
+                           // }
+                            // Reinitialize DataTable with new data
+                            $('#example1').DataTable();
+                        }
+                    });
+               
+            }
+        </script>
+    }
+
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+﻿@model TestWebApplication.Models.ViewModels.Projects
+@using Microsoft.AspNetCore.Identity
+@{
+
+    Layout = "_AdminLTE";
+}
+<html>
+<head>
+
+    <title>Edit Module</title>
+   
+</head>
+<body class="hold-transition sidebar-mini">
+    <form asp-action="Edit" method="post">
+        <div class="wrapper">
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Edit Project</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Projects" asp-action="Index">Index</a></li>
+                                <li class="breadcrumb-item active">Edit Project</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- SELECT2 EXAMPLE -->
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Project Form</h3>
+                        </div>
+                        <div class="card-body">
+                            <input type="hidden" asp-for="ProjectID" />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Project ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ProjectCode" data-placeholder="Project ID">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Organization</label>
+                                <div class="col-sm-10">
+                                    @*<select class="form-control" style="width: 100%;" disabled="disabled" data-placeholder="Select Customer" asp-for="CustomerID">
+                                        <option selected="selected"> @ViewBag.CustomerList.CustomerName</option>
+                                    </select>*@
+                                    <select class="form-control" style="width: 100%" data-placeholder="Select Customer" asp-for="CustomerID" asp-items="@(new SelectList(ViewBag.CustomerList,"CustomerID","CustomerName"))">
+                                        <option selected="selected">@ViewBag.Customer.CustomerName</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Project Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ProjectName" data-placeholder="Project Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Project Description</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ProjectDesc" data-placeholder="Project Description">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Project Status</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" data-placeholder="Select Project Status" asp-for="Status" asp-items="@(new SelectList(ViewBag.statusList,"PrjStatus","PrjStatus"))">
+                                        <option selected="selected">@ViewBag.ProjStatus</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Valid From</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control float-right" asp-for="ValidFrom" value="@Model.ValidFrom.ToString("yyyy-MM-dd")" data-placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Valid To</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control float-right" asp-for="ValidTo" value="@Model.ValidTo.ToString("yyyy-MM-dd")" data-placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Last Maintenance Contract Date</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control float-right" asp-for="LastDate" value="@Model.LastDate.ToString("yyyy-MM-dd")" data-placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedOn" />
+                <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+                <input type="hidden" asp-for="ModifiedOn" />
+                <input type="hidden" asp-for="CustomerID" />
+            </section>
+            <!-- /.content -->
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-info float-right"> Save </button>
+        </div>
+    </form>
+   
+
+</body>
+</html>
+

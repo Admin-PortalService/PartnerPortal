@@ -1,0 +1,132 @@
+﻿@model TestWebApplication.Models.ViewModels.MeetingNote
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<title>New Meeting Note</title>
+<html>
+<head>
+    <title>New Meeting Note</title>
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="wrapper">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Meeting Note</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="MeetingNote" asp-action="Index">Index</a></li>
+                                <li class="breadcrumb-item active">Meeting Note</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="card card-info">
+                        @if (@ViewBag.msgList != null)
+                            @foreach (var msg in @ViewBag.msgList)
+                            {
+                                {
+                                    <div class="alert alert-warning alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                        @msg.ToString()
+                                    </div>
+                                }
+                            }
+                        <div class="card-header">                           
+                            <h3 class="card-title">Meeting Note</h3>
+                        </div>
+                        
+                        <div class="card-body">                            
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" asp-for="Organization"></label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="orgId" onchange="loadProject(this)" data-placeholder="Select Organization" asp-for="Organization" asp-items="@(new SelectList(@ViewBag.CustomerList,"CustomerID","CustomerName"))" style="width: 100%;">
+                                        <option>Please select Organization</option>
+                                    </select>                                    
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" asp-for="Project"></label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="prjId" data-placeholder="Select Project" asp-for="Project" asp-items="@(new SelectList(@ViewBag.ProjectList,"ProjectID","ProjectName"))" style="width: 100%;">
+                                        <option>Please select Project</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" asp-for="Date"></label>
+                                <div class="col-sm-10">
+                                    <input type="date" asp-for="Date" class="form-control" data-placeholder="dd-MMM-yyyy">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" asp-for="Title"></label>
+                                <div class="col-sm-10">
+                                    <input type="text" asp-for="Title" class="form-control" placeholder="Please Enter Meeting Title">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" asp-for="Attendance"></label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="8" asp-for="Attendance" placeholder="Please Enter Attendance" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" asp-for="Note"></label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="8" asp-for="Note" placeholder="Please Enter Meeting Note" required></textarea>
+                                </div>
+                            </div>
+                                                     
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-info float-right"> Save </button>
+        </div>
+    </form>
+
+    @section scripts
+        {
+        <script type="text/javascript">
+
+            function loadProject(obj) {
+                var value = obj.value;
+                $.ajax({
+                    type: "POST",
+                    url: "/MeetingNote/GetProjectsByOrgId",
+                    data: { orgId: value },
+                    success: function (r) {
+                        $("#prjId").empty();
+                        $("#prjId").append("<option>Please select Project</option>")
+                        $.each(r, function (index, row) {
+                            console.log(row);
+                            $("#prjId").append("<option value='" + row.projectID + "'>" + row.projectName + "</option>")
+                        });
+                    }
+                });
+
+            }
+        </script>
+    }
+
+</body>
+
+</html>

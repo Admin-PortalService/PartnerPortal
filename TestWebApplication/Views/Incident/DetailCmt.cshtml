@@ -1,0 +1,159 @@
+﻿
+@model TestWebApplication.Models.ViewModels.IncidentComment
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+
+    <title>Incident Details</title>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <a asp-action="IndexIncident" class="btn btn-outline-primary">Back</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Incident" asp-action="IndexIncident">Index</a></li>
+                            <li class="breadcrumb-item active">Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- / .container fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                @*<div id="mainElement">*@
+                    @foreach (var item in ViewBag.Incident)
+                                {
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Incident - Details</h3>
+                    </div>
+                    <div class="card-body">
+                        
+                        <dl class="row">
+                            <dt class="col-sm-2">
+                                <span class="description-text">Issue ID</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.IssueID
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Issue Title</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.IssueTitle
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Issue Category</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.Category
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Priority</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.Priority
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Status</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.Status
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Module</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.ModuleID
+                            </dd>
+                            
+                            <dt class="col-sm-2">
+                                    <span class="description-text">Reported By</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.CreatedBy
+                            </dd>
+                            <dt class="col-sm-2">
+                                    <span class="description-text">Reported On</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.CreatedOn
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Modified On</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.ModifiedOn
+                            </dd>
+                            <dt class="col-sm-2">
+                                <span class="description-text">Modified By</span>
+                            </dt>
+                            <dd class="col-sm-10">
+                                    @item.ModifiedBy
+                            </dd>
+                        </dl>
+                       
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="IndexIncident" class="btn btn-outline-primary mr-1">Cancel</a>
+                            <a asp-action="Tab" asp-controller="Incident" asp-route-id="@item.IssueID" class="btn  btn-info float-right">  Edit  </a>
+                    </div>
+                </div>
+                }
+            </div>
+           
+        </section>
+       
+        <!--All Comment -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Timelime example  -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- The time line -->
+                        <div class="timeline">
+                            <!-- timeline time label -->
+                            <div class="time-label">
+                                <span>All Comments</span>
+                            </div>
+                            <!-- /.timeline-label -->
+                            <!-- timeline item -->
+                             @foreach (var item in ViewBag.Comment)
+                                {
+                            <div>
+                                <i class="fas fa-comments bg-yellow"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fas fa-clock"></i> @item.CreatedOn </span>
+                                    <h3 class="timeline-header">@item.CreatedBy commented.</h3>
+                                    <div class="timeline-body">
+                                            @item.Subject 
+                                    </div>
+                                    <div class="timeline-body">
+                                            @item.CmtMsg
+                                    </div>
+                                </div>  
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+    
+</body>
+</html>

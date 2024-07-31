@@ -1,0 +1,127 @@
+﻿@model TestWebApplication.Models.ViewModels.Users
+@using Microsoft.AspNetCore.Identity
+@{
+
+    Layout = "_AdminLTE";
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>User Form</title>
+
+</head>
+<body class="hold-transition sidebar-mini">   
+    <div class="wrapper">       
+        <form asp-action="Edit" method="post">
+            <div class="wrapper">
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>Edit User Details</h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Users" asp-action="Index">Index</a></li>
+                                    <li class="breadcrumb-item active">Edit User</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <!-- SELECT2 EXAMPLE -->
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">User Form</h3>
+                                @*<div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                </div>*@
+                            </div>
+                            <div class="card-body">
+
+                                <input type="hidden" asp-for="UserID" />
+                                @* <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">User Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="UserName" data-placeholder="User Name">
+                                    </div>
+                                </div> *@
+                                    <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">First Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="FirstName" data-placeholder="First Name">
+                                    </div>
+                                 </div>
+                                    <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Last Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="LastName" data-placeholder="Last Name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">User Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="Email" data-placeholder="User Email" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">User Role</label>
+                                    <div class="col-sm-10">                                      
+                                        <select class="form-control select2" multiple="multiple" data-placeholder="Select Role" style="width: 100%;" disabled="disabled"> @*name="RoleID" asp-items="@(ViewBag.Roles as SelectList)"*@
+                                            <option selected="selected">@ViewBag.RoleList.RoleName</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Job Level</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" data-placeholder="Select Job Level" name="Levels" asp-items="@(new SelectList(@ViewBag.userLevelList,"Level","Level"))" style="width: 100%;">
+                                            <option selected="selected">@ViewBag.Level.Levels</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Valid From</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control float-right" asp-for="ActiveFr" value="@Model.ActiveFr.ToString("yyyy-MM-dd")" data-placeholder="dd-MMM-yyyy">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Valid To</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control float-right" asp-for="ActiveTo" value="@Model.ActiveTo.ToString("yyyy-MM-dd")" data-placeholder="dd-MMM-yyyy">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="hidden" asp-for="CreatedBy" />
+                    <input type="hidden" asp-for="CreatedOn" />
+                    <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+                    <input type="hidden" asp-for="ModifiedOn" />
+                </section>
+                <!-- /.content -->
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-info float-right">Save & Next</button>
+            </div>
+        </form>        
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.SLAConfig>
+@{
+    Layout = "_AdminLTE";
+
+    int i = 0;
+}
+
+<html lang="en">
+<head>
+
+</head>
+<body>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>SLA Configuration</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-info">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-form-label">Status</label>
+                        <div class="col-3">
+                            <select class="form-control" style="width: 100%;" data-placeholder="Select Status" id="status" name="StatusID" asp-items="@(new SelectList(@ViewBag.Status,"No","IncidentStatus"))">
+                                <option selected="selected">Please select Status</option>
+                            </select>
+                        </div>
+                        <label class="col-form-label">SLA Time in Minute</label>
+                        <div class="col-2">
+                            <input type="number" class="form-control" id="slamin" name="SLAmin" />
+                        </div>
+                        <label class="col-form-label">Priority</label>
+                        <div class="col-3">
+                            <select class="form-control" style="width: 100%;" data-placeholder="Select Priority" id="priority" name="Priority" asp-items="@(new SelectList(@ViewBag.Priority,"Priority","Priority"))">
+                                <option selected="selected">Please select priority</option>
+                            </select>
+                        </div>
+                        <div class="col-1">
+                            <button type="submit" onclick="slaSave()" class="btn btn-info float-right">Save</button>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <label>Detail</label>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>SLA Name</th>
+                                    <th>Priority</th>
+                                    <th>SLA Min</th>
+                                    <th>SLA Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td><span class="spnSlaName" data-index="@i">@Html.DisplayFor(modelItem => item.SLAName)</span></td>
+                                        <td><span>@Html.DisplayFor(modelItem => item.Priority)</span></td>
+                                        <td>
+                                            <span class="spnSLAmin" data-index="@i">@Html.DisplayFor(modelItem => item.SLAmin) Min</span>
+                                            <input class="txtSLAmin" data-index="@i" type="number" style="display: none;" />
+                                        </td>
+                                        <td><span>@Html.DisplayFor(modelItem => item.SLAType)</span></td>
+                                        <td style="display : flex;">
+                                            <label class="lblEdit col-2" data-index="@i"><i class="fas fa-edit float-right"></i></label>
+                                            <lable class="lblSave col-2" data-index="@i" style="display: none;"><i class="fas fa-save float-right"></i></lable>
+                                            <label class="btnDelete col-2" data-toggle="modal" data-target="#modal-delete-confirm" data-id="@item.Id"><i class="fas fa-trash"></i></label>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <div id="alert-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header card text-white bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 id="alert-modal-title" class="modal-title">Save SLA Configuration</h4>
+                </div>
+                <div id="alert-modal-body" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-delete-confirm" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Record</h4>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div> <div class="modal-body">
+                    <p>Are you sure to delete this record?</p>
+                </div>
+                <div class="card-footer">
+                    <input type="button" value="Cancel" class="btn btn-primary float-left" data-dismiss="modal" />
+                    <form asp-action="Delete">
+                        <input type="hidden" name="Id" id="deletedId" value="" />
+                        <input type="submit" value="Confirm" class="btn btn-primary float-right" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function slaSave() {
+            var status = $("#status").val();
+            var slamin = $("#slamin").val();
+            var priority = $("#priority").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/SLAConfig/Index",
+                data: {
+                    Status: status,
+                    SLAmin: slamin,
+                    Priority: priority
+                },
+                success: function (result) {
+                    window.location.href = '@Url.Action("Index", "SLAConfig")'
+                }
+            });
+
+        }
+
+        $(document).on("click", ".btnDelete", function () {
+            var deletedId = $(this).data("id");
+            $("#modal-delete-confirm #deletedId").val(deletedId);
+        });
+
+
+        $(document).on("click", ".lblEdit", function () {
+            var index = $(this).data('index');
+
+            $('.txtSLAmin').hide();
+            $('.lblSave').hide();
+            $('.spnSLAmin').show();
+            $('.lblEdit').show();
+
+            $(this).hide();
+            $('.lblSave[data-index="' + index + '"]').show();
+            $('.spnSLAmin[data-index="' + index + '"]').hide();
+            $('.txtSLAmin[data-index="' + index + '"]').show();
+
+        });
+
+        $(document).on("click", ".lblSave", function () {
+            var index = $(this).data('index');
+            var slaMin = $('.txtSLAmin[data-index="' + index + '"]').val();
+            var slaName = $('.spnSlaName[data-index="' + index + '"]').text();
+            $.ajax({
+                type: "POST",
+                url: "/SLAConfig/Save",
+                data: {
+                    SLAMin: slaMin,
+                    SLAName: slaName
+                },
+                success: function (result) {
+                    window.location.href = '@Url.Action("Index", "SLAConfig")'
+                }
+            });
+        });
+
+    </script>
+            }
+
+</html>

@@ -1,0 +1,128 @@
+﻿@model TestWebApplication.Models.ViewModels.UserAccess
+@{
+
+    Layout = "_AdminLTE";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/adminlte/plugins/bootstrap/bootstrap-multiselect.css" rel="stylesheet" />
+    <title>UserAccess Form</title>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <form asp-action="Create" method="post">
+            <div class="wrapper">
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>User Details</h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Users" asp-action="Index">Index</a></li>
+                                    <li class="breadcrumb-item active">User Details</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <!-- SELECT2 EXAMPLE -->
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">User Details</h3>
+                                @*<div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                                </div>*@
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">User Mail</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="UserMail" data-placeholder="User Mail" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Role</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control disabled" data-placeholder="User Role" asp-for="RoleName" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Valid From</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control float-right" asp-for="StartDate" data-placeholder="dd-MMM-yyyy" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Valid To</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control float-right" asp-for="EndDate" data-placeholder="dd-MMM-yyyy" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">User Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="UserName" data-placeholder="User Name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Customer/Organization</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" style="width: 100%;" asp-for="CustomerID" id="userCus" asp-items="@(new SelectList(ViewBag.OrgList, "CustomerID", "CustomerName"))" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" asp-for="UserID" />
+                    <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                    <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+
+                </section>
+                <!-- /.content -->
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-info float-right">Save</button>
+            </div>
+
+            @*@if (@ViewBag.msgList != null)
+            @foreach (var msg in @ViewBag.msgList)
+            {
+
+            {
+            <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+            @msg.ToString()
+            </div>
+            }
+            }*@
+        </form>
+    </div>
+
+    @section Scripts{
+        <script src="~/adminlte/plugins/bootstrap/js/bootstrap-multiselect.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#userCus').multiselect(
+
+                );
+            });
+        </script>
+    }
+
+</body>
+</html>

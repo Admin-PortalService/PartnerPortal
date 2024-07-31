@@ -1,0 +1,102 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.Contract>
+
+@{
+    Layout = "_AdminLTE";
+}
+
+<html lang="en">
+<head>
+
+</head>
+<body>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All Contract List</h3>
+
+                        @if (ViewBag.IsInternal == true)
+                        {
+                            <h6><a asp-action="Create" asp-controller="Contract" class="btn  btn-info float-right">Create</a></h6>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @if (ViewBag.msg != null)
+    {
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+            <h4>
+                <i class="fas fa-check-circle"></i>
+                @ViewBag.msg
+            </h4>
+        </div>
+    }
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <table id="example1" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Contract ID</th>
+                                    <th>Organization</th>
+                                    <th>Description</th>
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>Status</th>
+                                    <th>Setup Date</th>
+                                    <th>Expire Date</th>
+                                    <th>Partner Margin</th>
+                                    <th>Contract File</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in @ViewBag.contractList)
+                                {
+                                    <tr>
+                                        <td><a bgcolor="#000310" asp-action="Edit" asp-route-id="@item.ContractId">@item.ContractId</a></td>
+                                        <td>
+                                            @foreach (var org in @ViewBag.CustomerList)
+                                            {
+                                                if (@item.CustomerId == @org.CustomerID)
+                                                {
+                                                    @org.CustomerName
+                                                }
+                                            }
+                                        </td>
+                                        <td>@item.Description</td>
+                                        <td>@item.Country</td>
+                                        <td>@item.State</td>
+                                        @if (@item.IsActive == true)
+                                        {
+                                            <td>Active</td>
+                                        } @if (@item.IsActive == false)
+                                        {
+                                            <td>InActive</td>
+                                        }
+                                        <td>@item.SetupDate.ToString("MM/dd/yyyy")</td>
+                                        <td>@item.ExpireDate.ToString("MM/dd/yyyy")</td>
+                                        <td>@item.Margin  % </td>
+                                        <td><a href="/Contract/DownloadFile?fileName=@item.attachFile">@item.attachFile</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</body>
+</html>

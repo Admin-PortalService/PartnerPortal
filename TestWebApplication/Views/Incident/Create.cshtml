@@ -1,0 +1,379 @@
+﻿@model TestWebApplication.Models.ViewModels.Incident
+
+@{
+
+    Layout = "_AdminLTE";
+}
+   
+    <title>Create Incident</title>
+    
+<html>
+<head>
+
+    <title>Create Incident</title>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="wrapper">
+            <!-- Content Wrapper. Contains page content -->
+                <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Create Incident</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Incident" asp-action="IndexIncident">Index</a></li>
+                                    <li class="breadcrumb-item active">Create Incident</li>
+                                </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+                <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+
+                    @if (ViewBag.msgList != null)
+                    {
+                        foreach (var msg in ViewBag.msgList)
+                        {
+                            {
+                                <div class="alert alert-warning alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                    @msg.ToString()
+                                </div>
+                            }
+                        }
+                    }
+                    
+                    @if (ViewBag.errormsg != null)
+                    {
+                        <div class="alert alert-warning alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                            @ViewBag.errormsg
+                        </div>
+                    }
+
+
+                    @if (ViewBag.msg != null)
+                    {
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                            <h4>
+                                <i class="fas fa-check-circle"></i>
+                                @ViewBag.msg
+                            </h4>
+                        </div>
+                    }
+
+
+                    <!-- SELECT2 EXAMPLE -->
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Incident Form</h3>
+                           @* <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>*@
+                        </div>
+                                                    
+                        <!-- /.card-header -->
+                        @*     <fieldset>
+                        <legend>
+                        <h5>Account Details</h5>
+                        </legend>
+                        <div class="row1-details">
+                        <div> <label>Customer Number</label> <input type="text" name="CustomerID" required> </div>
+                        <div> <label>Customer Name</label> <input type="text" name="CustomerName" required> </div>
+                        </div>
+                        </fieldset>*@
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="IssueTitle" class="col-sm-2 col-form-label">Issue Title</label>
+                                <div class="col-sm-10">
+                                <input type="text" class="form-control" name="IssueTitle" asp-for="IssueTitle" placeholder="Give the issue a title" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Issue Category</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" asp-for="Category" asp-items="@(new SelectList(@ViewBag.IssueType,"IssueTypeName","IssueTypeName"))">
+                                        <option selected="selected">Please Select Issue Category</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                           
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Project and Module</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Project</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" asp-for="ProjectID" asp-items="@(new SelectList(@ViewBag.ProjectList,"ProjectID","ProjectName"))">
+                                        <option selected="selected">Please Select Project</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Module</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" style="width: 100%;" asp-for="ModuleID" asp-items="@(new SelectList(@ViewBag.ModuleList,"ModuleID","ModuleDesc"))">
+                                        <option selected="selected">Please Select Module</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Priority and Status</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Priority</label>
+                                <div class="col-sm-10">
+                                <select class="form-control" style="width: 100%;" asp-for="Priority" asp-items="@(new SelectList(@ViewBag.Priority,"Priority","PriorityDesc"))">
+                                    <option selected="selected">Please Select Priority</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Status</label>
+                                    <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="Status" value="Open" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  <!-- adding "Alternate Contact Details"-->
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Alternate Contact Details</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-6 col-form-label">Alternate Contact Name</label>
+                                <label class="col-sm-4 col-form-label">Alternate Contact Phone</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="AltContact" asp-for="AltContact" required>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" name="AltPhone" asp-for="AltPhone" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Alternate Contact Email</label> @* i class="fa fa-question-circle"></i> *@
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" name="AltEmail" asp-for="AltEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--adding alternate contact-->
+                    <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title">Path and Description</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" ><i class="fas fa-minus"></i></button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">AreaPath</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" asp-for="AreaPath" name="AreaPath" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Detail Description</label>
+                            <div class="col-sm-10">
+                                    <textarea class="form-control" asp-for="DetailDesc" id="editor" placeholder="Enter Detail Description here..." name="DetailDesc" required></textarea>
+                                        @*  <textarea class="form-control textarea"
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" placeholder="Enter Detail Description here..." name="DetailDesc" required></textarea>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <script src="~/js/tinymce/tinymce.min.js"></script>
+
+                    <script type="text/javascript">
+                        tinymce.init({
+                            selector: 'textarea#editor',
+                            height: 250,
+                            promotion: false,
+                            plugins: 'image link media table lists help',
+                            toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | insertfile | link image media | fontsize ',
+                            //enable title field in the Image dialog
+                            image_title: true,
+                            //enable automatic uploads of images represented by blob or data URIs
+                            automatic_uploads: true,
+                            //add custom filepicker only to Image dialog
+                            file_picker_types: 'file image media',
+                            file_picker_callback: function (callback, value, meta) {
+                                // Create a custom file picker dialog and trigger an AJAX request to upload the file.
+                                // Implement your file picker logic here.
+                                const input = document.createElement('input');
+                                input.setAttribute('type', 'file');
+                                input.setAttribute('accept', '.*');
+                                input.onchange = function () {
+                                    const file = input.files[0];
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    // Send an AJAX request to upload the file to the server.
+                                    fetch('/api/files/upload', {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Insert the uploaded file into the TinyMCE editor using callback.
+                                            callback(data.url, { text: file.name });
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                        });
+                                };
+                                input.click();
+                            },
+
+                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                            //insertfile_file_types: 'pdf doc docx xlsx',
+                            //insertfile_max_size: '500mb',
+                        });
+                    </script>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Attachment</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Attachment </label>
+                                <div class="col-sm-10">
+                                    <i class="fa fa-folder-open"></i>
+                                    <input type="file" name="UploadFile" id="UploadFile" accept=".xls,.xlsx,.doc,.docx,.ppt,.pptx,application/pdf,.pdf,.zip,.txt,.png,.jpg,.jpeg" />
+                                </div>
+                            </div>
+                        </div>
+                            
+                    </div>
+                </div>                
+            @*<div>
+            <input type="checkbox" id="tc" name="name" />
+            <label for="tc">I accept the terms and conditions.</label>
+            Read <a href="https://link.com">terms and conditions</a>
+            </div>*@
+                <input type="hidden" name="Status" value="Open" />
+                   @* <input type="hidden" name="AttachDesc" value="file" />*@
+                <input type="hidden" name="CreatedBy" value="@User.Identity?.Name" />
+                <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+                <input type="hidden" name="IsAssigned" value="false" />
+            </section>
+        <!-- /.content -->
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-info float-right">Submit</button>
+        </div>
+        
+    </form>
+
+    <script>
+
+        $(document).on('change', '#UploadFile', function (e) {
+            if (e.target.files[0] != null) {
+                documentFile_CheckUploadFile();
+            }
+        });
+
+        function showErrorModel(errorMessage) {
+            $("#UploadFile").val('');
+            $('#error-modal #error-modal-message').text(errorMessage);
+            $('#error-modal').modal('show');
+        }
+
+        function documentFile_CheckUploadFile() {
+            var inputFieldId = "UploadFile";
+            var file = document.getElementById(inputFieldId).files[0];
+            var formData = new FormData();
+            formData.append(inputFieldId, file);
+
+            $.ajax({
+                type: "POST",
+                url: '/Incident/CheckUploadDocumentFile',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.message == "TooManyFiles") {
+                        showErrorModel("Please select a single file only!");
+                        $("#UploadFile").val('');
+                    }
+                    else if (data.message == "InvalidFileExtension") {
+                        showErrorModel("Invalid File Upload.");
+                        $("#UploadFile").val('');
+                    } 
+                    else if (data.message == "FileSize") {
+                        showErrorModel("File is too large.");
+                        $("#UploadFile").val('');
+                    }
+                    else if (data.message == "Error") {
+                        showErrorModel(data.d.errorMessage);
+                        $("#UploadFile").val('');
+                    }
+                    else if (data.message == "Success") {
+                        //$("#TagStringDownload").val(file);
+                        $("#btnSubmit").prop("disabled", false);
+                    }
+                    else if (data.message == "Create") {
+                        //$("#TagStringDownload").val(file);
+                        $("#btnSubmit").prop("disabled", false);
+                    }
+                },
+
+                error: function (response) {
+                    showErrorModel(response);
+                }
+            });
+        }
+    </script>
+    
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+</body>
+</html>

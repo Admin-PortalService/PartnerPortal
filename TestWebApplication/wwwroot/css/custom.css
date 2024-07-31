@@ -1,0 +1,29 @@
+.circleImageText {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #512DA8;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    float: left;
+    vertical-align: middle;
+}
+
+.header-badge {
+    font-size: 0.8rem;
+    font-weight: 300;
+    padding: 2px 4px;
+    position: relative;
+    bottom: 15px;
+}
+
+.input-group .dropdown-menu .dropdown-item{
+    cursor: pointer;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

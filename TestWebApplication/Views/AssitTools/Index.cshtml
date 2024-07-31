@@ -1,0 +1,30 @@
+﻿@model TestWebApplication.Models.ViewModels.ImplementationAssist
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+
+</head>
+<body>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    @Html.Raw(Model.Description)
+                </p>
+
+@*                @if (ViewBag.Role.RoleName == "SuperAdmin")*@                
+                @if (ViewBag.Role == "363432dc-f55d-43bd-9f8c-8f764817319e")
+                {
+                    <a asp-controller="AssitTools" asp-action="Edit" asp-route-id="@Model.AssistId">
+                        <button class="btn btn-primary">Edit</button>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+</body>
+</html>

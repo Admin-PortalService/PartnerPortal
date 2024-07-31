@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.Roles>
+
+@foreach (var item in Model)
+{ 
+    <div class="card-header bg-white list-row">
+    <div class="user-block">
+        <a asp-action="Edit" asp-route-id="@item.RoleID">
+        <div class="circleImageText"
+             style="background-color: @(String.Format("#{0:X6}", new Random().Next(0X1000000))) !important">
+            @item.RoleType.Substring(0,1).ToUpper()
+             @*@item.Name?.FirstOrDefault)*@
+             </div>
+                <div class="info-box-content">
+                    <span class="username">@Html.DisplayFor(modelItem => item.RoleType)</span>
+            <span class="description">@Html.DisplayFor(modelItem => item.RoleDesc)</span>
+             </div></a>
+                
+    </div>
+     <div class="card-tools align-centre ">
+            <button type="button" class="btn btn-tool btnDelete" data-card-widget="remove" data-toggle="modal" data-target="#modal-delete-confirm" data-id="@item.RoleID">
+                <i class="fas fa-trash"></i>
+            </button>
+    </div>
+    </div>
+
+}

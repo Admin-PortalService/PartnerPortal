@@ -1,0 +1,115 @@
+﻿@model TestWebApplication.Models.ViewModels.Item
+
+@if (Model == null)
+{
+    <tbody>
+        <tr>
+            <th style="width:66px; height: 54px; display: flex; flex-direction: row; justify-content: center; gap: 1rem;">
+                <a class="Save" href="javascript:;"><i class="fas fa-check-circle rowSave"></i></a>
+                <a class="Edit" href="javascript:;" style="display:none"><i class="fas fa-edit"></i></a>
+                <a class="Cancel" href="javascript:;" style="display:none"><i class="fas fa-times-circle"></i></a>
+                <a class="Delete" href="javascript:;"><i class="fas fa-trash-alt"></i></a>
+            </th>
+            <th style="display: none;">Item Id</th>
+            <th class="ItemName">
+                <span></span>
+                <input type="text" value="" style="display:none; width: 100%; height: 30px;" />
+            </th>
+            <th class="ItemDesc">
+                <span></span>
+                <input type="text" value="" style="display:none; width: 100%; height: 30px;" />
+            </th>
+            <th class="Amount">
+                <span></span>
+                <input type="text" value="" style="display:none; width: 100%; height: 30px;" />
+            </th>
+            <th class="Remark">
+                <span></span>
+                <input type="text" value="" style="display:none; width: 100%; height: 30px;" />
+            </th>
+        </tr>
+    </tbody>
+
+}
+
+
+<div class="modal fade" id="modal-delete-confirm" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Record</h4>
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div> <div class="modal-body">
+                <p>Are you sure to delete this record?</p>
+            </div>
+            <div class="card-footer">
+                <input type="button" value="Close" class="btn btn-primary float-left" data-dismiss="modal" />
+                <form asp-action="Delete">
+                    <input type="hidden" name="Id" id="deletedId" value="" />
+                    <input type="submit" value="Confirm" class="btn btn-primary float-right" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        //Remove the dummy row if data present.
+        if ($("#tbody tr").length > 2) {
+            $("#tbody tr:eq(1)").remove();
+        } else {
+            var row = $("#tbody tr:last-child");
+            row.find(".Save").hide();
+            row.find(".Delete").hide();
+            row.find("span").html('&nbsp;');
+        }
+    });
+
+    function AppendRow(row, customerId, name, country) {
+      
+        row.find(".Save").show();
+        row.find(".Delete").show();
+        $("#tbody").append(row);
+    };
+
+    //Add event handler.
+    $("#tbody").on("click", "#btnAdd", function () {
+        debugger
+        var itemName = $("#txtItemName").val();
+        var itemDesc = $("#txtItemDesc").val();
+        var amount = $("#txtAmount").val();
+        var remark = $("#txtRemark").val();
+        $.ajax({
+            type: "POST",
+            url: "/Statement/Save",
+            data: {
+                ItemName: itemName,
+                ItemDes: itemDesc,
+                Remark: remark,
+                Amount: amount
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                var row = $("#tbody tr:last-child");
+                if ($("#tbody tr:last-child span").eq(0).html() != "&nbsp;") {
+                    row = row.clone();
+                }
+                AppendRow(row, r.CustomerId, r.Name, r.Country);
+                $("#txtItemName").val("");
+                $("#txtItemDesc").val("");
+                $("#txtAmount").val("");
+                $("#txtRemark").val("");
+            }
+        });
+    });
+
+
+</script>

@@ -1,0 +1,122 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TestWebApplication.Models.ViewModels.MeetingNote
+
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html lang="en">
+<head>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <form id="filterForm" asp-action="NoteList" method="post">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Meeting Note</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item active">Meeting Note</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            @if (ViewBag.msg != null)
+            {
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                    <h4>
+                        <i class="fas fa-check-circle"></i>
+                        @ViewBag.msg
+                    </h4>
+                </div>
+            }
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a asp-area="" asp-controller="MeetingNote" asp-action="Create" style="font-weight: bold; font-size: 20px;">New Note</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label class="col-md-4" asp-for="Organization"></label>
+                                    <select class="col-md-7 custom-select" id="orgId" onchange="loadProject(this)" data-placeholder="Select Organization" asp-for="Organization" asp-items="@(new SelectList(@ViewBag.CustomerList,"CustomerID","CustomerName"))" style="width: 100%;">
+                                        <option>Please select Organization</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="col-md-4" asp-for="Project"></label>
+                                    <select class="col-md-7 custom-select" id="prjId" data-placeholder="Select Project" name="Project" asp-items="@(new SelectList(@ViewBag.ProjectList,"ProjectID","ProjectName"))" style="width: 100%;">
+                                        <option>Please select Project</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-info float-right" id="btnFilter">Filter</button>
+
+                            </div>
+                            <br />
+                            <div id="filteredDataContainer">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </form>
+
+    @section scripts
+        {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#filterForm').submit(function (e) {
+                    e.preventDefault();
+
+                    var formData = $('#filterForm').serialize();
+
+                    // Make an Ajax request to submit the form data
+                    $.ajax({
+                        url: '/MeetingNote/NoteList',
+                        method: 'POST',
+                        data: formData,
+                        success: function (result) {
+                            $('#filteredDataContainer').html(result);
+                        },
+                        error: function () {
+                            console.error('Error while loading filtered data.');
+                        }
+                    });
+                });
+            });
+
+            function loadProject(obj) {
+                var value = obj.value;
+                $.ajax({
+                    type: "POST",
+                    url: "/MeetingNote/GetProjectsByOrgId",
+                    data: { orgId: value },
+                    success: function (r) {
+                        $("#prjId").empty();
+                        $("#prjId").append("<option>Please select Project</option>")
+                        $.each(r, function (index, row) {
+                            $("#prjId").append("<option value='" + row.projectID + "'>" + row.projectName + "</option>")
+                        });
+                    }
+                });
+
+            }
+        </script>
+    }
+
+</body>
+</html>

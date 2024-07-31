@@ -1,0 +1,111 @@
+﻿@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+    <title>Assign Log History</title>
+</head>
+<body class="hold-transition sidebar-mini">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1> Assign Log History</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-header">
+                    <div class="row">
+                        <label class="col-md-2">Issue Name</label>
+                        <select class="col-md-5 form-control" id="issueId" onchange="filter(this)" data-placeholder="Select Issue Name" asp-items="@(new SelectList(@ViewBag.IncidentList,"IssueID","IssueTitle"))" style="width: 100%;">
+                            <option>Please select Issue Name</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="card-body p-0">
+                    <table id="example1" class="table table-bordered table-hover" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Issue ID</th>
+                                <th>Issue Name</th>
+                                <th>Description</th>
+                                <th>Assign By</th>
+                                <th>Assign To</th>
+                                <th>Assign Date</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in @ViewBag.assignLog)
+                            {
+                                <tr>
+                                    <td>@item.IssueID</td>
+                                    <td>@item.IssueName</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.AssignBy</td>
+                                    <td>@item.AssignTo</td>
+                                    <td>@item.AssignDate</td>
+                                    <td>@item.Remark</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @section Scripts {
+        <script>
+            function filter(obj) {
+                var issueId = $("#issueId").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Assign/FilteringIssueName",
+                    data: { issueId: issueId },
+                    success: function (r) {
+                        var table = $('#example1').DataTable();
+                        table.clear().destroy();
+
+                        if (r.length > 0) {
+                            for (var i = 0; i < r.length; i++) {
+                                var obj = r[i];
+
+                                var assignDate = new Date(obj.assignDate);
+                                var formattedassignDate = assignDate.toLocaleString();
+
+                                var row = "<tr>" +
+                                    "<td>" + obj.issueID + "</td>" +
+                                    "<td>" + obj.issueName + "</td>" +
+                                    "<td>" + obj.description + "</td>" +
+                                    "<td>" + obj.assignBy + "</td>" +
+                                    "<td>" + obj.assignTo + "</td>" +
+                                    "<td>" + formattedassignDate + "</td>" +
+                                    "<td>" + obj.remark + "</td>" +
+                                    "</tr>";
+
+                                $('#example1 tbody').append(row);
+                            }
+                        }
+                        
+                        // Reinitialize DataTable with new data
+                        $('#example1').DataTable({
+                            "columnDefs": [
+                                { "width": "auto", "targets": 6 }
+                            ]
+                        });
+                    }
+                });
+
+            }
+        </script>
+    }
+</body>
+</html>

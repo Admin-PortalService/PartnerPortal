@@ -1,0 +1,107 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    var imgFile = Model.Input.ImgUrl;
+
+
+    //<h3>@ViewData["Title"]</h3>
+
+    <partial name="_StatusMessage" for="StatusMessage" />
+    <div class="col-md-12">
+        <img id="ImagePrv" src="~/images/@imgFile" alt="Profile Image" width="150" height="150" style="border:1px; margin-bottom:20px; " />
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form enctype="multipart/form-data" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label asp-for="Input.FirstName" class="col-md-4"></label>
+                        <input asp-for="Input.FirstName" class="col-md-6" autocomplete="off" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Input.LastName" class="col-md-4"></label>
+                        <input asp-for="Input.LastName" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label asp-for="Email" class="col-md-4"></label>
+                        <input asp-for="Email" class="col-md-6" disabled /><br />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Input.JobTitle" class="col-md-4"></label>
+                        <input asp-for="Input.JobTitle" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label asp-for="Input.PhoneNumber" class="col-md-4"></label>
+                        <input asp-for="Input.PhoneNumber" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Input.Address" class="col-md-4"></label>
+                        <input asp-for="Input.Address" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label asp-for="Input.City" class="col-md-4"></label>
+                        <input asp-for="Input.City" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Input.State" class="col-md-4"></label>
+                        <input asp-for="Input.State" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.State" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label asp-for="Input.Country" class="col-md-4"></label>
+                        <input asp-for="Input.Country" class="col-md-6" autocomplete="off" /><br />
+                        <span asp-validation-for="Input.Country" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Input.ProfileImage" class="col-md-4"></label>
+                        <div class="col-md-6 custom-file">
+                            <input asp-for="Input.ProfileImage" class="custom-file-input" 
+                                   onchange="document.getElementById('ImagePrv').src = window.URL.createObjectURL(this.files[0])" />
+                            <label class="custom-file-label">Upload profile image</label>
+                        </div>
+                        <span asp-validation-for="Input.Country" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <hr />
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="~/AdminLTE/plugins/jQuery/jQuery-2.1.3.min.js"></script>
+  
+    <script src="~/AdminLTE/plugins/moment/moment.min.js"></script>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+
+        <script>
+            $(document).ready(function () {
+                $(".custom-file-input").on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                });
+            })
+
+        </script>
+    }
+}

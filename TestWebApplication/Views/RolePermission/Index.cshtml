@@ -1,0 +1,102 @@
+﻿@using TestWebApplication.Models.ViewModels;
+@model TestWebApplication.Models.ViewModels.RolePermissionVM
+
+@{
+    ViewData["Title"] = "Role Permission";
+    Layout = "_AdminLTE";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Role Permission</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">RolePermission</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <form asp-action="Index">
+            <div id="mainHeader" class="row mb-3">
+                <div class="col-md-4">
+                    <div class="form-group row mb-0">
+                        <label asp-for="RoleId" class="col-sm-2 col-form-label">Role</label>
+                        <div class="col-sm-10">
+                            <select asp-for="RoleId" class="form-control"
+                                    asp-items="@(new SelectList(Model.Roles, nameof(Roles.RoleID), nameof(Roles.RoleType)))">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 vertical-align">
+                    <i><span id="filterCount"></span></i>
+                </div>
+            </div>
+            @Html.ValidationSummary()
+            <div id="mainElement">
+                <partial name="_ListDataPartial.cshtml" />
+            </div>
+            <div id="mainFooter" class="row">
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/javascript">
+        function clearFilter() {
+            $("#mainElement").html('');
+            $("#filterCount").text('');
+            $("#mainFooter").html('');
+        }
+
+        function displayRowCountAndFooter()
+        {
+            var rowCount = $('#mainElement .list-row').length;
+            if (rowCount) {
+                $("#filterCount").text(rowCount + " of " + rowCount);
+                if (rowCount > 0) {
+                    $("#mainFooter").append(' <div class="col-md-2 pt-3 pb-3 ml-auto text-right"><button type="submit" class="btn btn-primary">Submit</button></div>')
+                }
+            }
+        }
+
+        $(document).ready(function(){
+            displayRowCountAndFooter();
+            $("#RoleId").trigger("change");
+        });
+
+        $(document).on("change","#RoleId",function(){
+            clearFilter();
+            var roleId = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: "/RolePermission/LoadListDataPartial",
+                data: { sortOrder: "ascending", roleId: roleId },
+                dataType: "html"
+            })
+                .done(function (result) {
+                    if (result) {
+                        $("#mainElement").append(result);
+
+                        displayRowCountAndFooter();
+
+                    }
+                })
+                .fail(function (xhr, ajaxOptions, thrownError) {
+                    console.log("Error in AddTableLines:", thrownError);
+                    $("#mainElement").append(xhr.responseText);
+                })
+                .always(function () {
+                    // $("#footer").css("display", "none"); // hide loading info
+                });
+        });
+    </script>
+}

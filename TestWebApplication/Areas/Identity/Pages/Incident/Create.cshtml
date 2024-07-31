@@ -1,0 +1,46 @@
+﻿@page
+@model TestWebApplication.Areas.Identity.Pages.Incident.CreateModel
+@{
+    ViewData["Title"] = "Create Incident";
+}
+
+<h1>@ViewData["Title"]</h1>
+<link rel="stylesheet" href="~/css/StyleSheet1.css" asp-append-version="true" />
+
+<form method="post">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+
+                <div class="card-body py-md-4">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="IssueTitle" placeholder="IssueTitle">
+                    </div>
+                    <div class="form-group">
+                        <input class="combo" id="Category" name="CategoryCombo">
+                        <select name=" Category " onChange="combo(this, 'Category')">
+                            <option value="Select">Select....</option>
+                            <option value="Bug">Bug</option>
+                            <option value="UserFeedback">User Feedback</option>
+                            <option value="Testing">Testing</option>
+                            <option value="DesignRequest">Design Request</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="Project" placeholder="Project" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="AreaPath" placeholder="AreaPath" required>
+                    </div>
+                    <br /> <br />
+                    <div class="d-flex flex-row align-items-center justify-content-between">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

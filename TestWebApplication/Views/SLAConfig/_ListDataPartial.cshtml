@@ -1,0 +1,32 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.SLAConfig>
+
+
+<div class="card-body">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>SLA Name</th>
+                <th>Priority</th>
+                <th>SLA Min</th>
+                <th>SLA Type</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><span>@Html.DisplayFor(modelItem => item.SLAName)</span></td>
+                    <td><span>@Html.DisplayFor(modelItem => item.Priority)</span></td>
+                    <td><span class="spnSLAmin">@Html.DisplayFor(modelItem => item.SLAmin) Min</span></td>
+                    <td><span>@Html.DisplayFor(modelItem => item.SLAType)</span></td>
+                    <td style="display : flex;">
+                        <label class="lblEdit col-2"><i class="fas fa-edit float-right"></i></label>
+                        <lable class="lblSave col-2" style="display: none;"><i class="fas fa-save float-right"></i></lable>
+                        <label class="btnDelete col-2" data-toggle="modal" data-target="#modal-delete-confirm" data-id="@item.Id"><i class="fas fa-trash"></i></label>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

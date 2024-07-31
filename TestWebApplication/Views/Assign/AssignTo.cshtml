@@ -1,0 +1,85 @@
+﻿@model TestWebApplication.Models.ViewModels.Assign
+@{
+
+    Layout = "_AdminLTE";
+}
+
+<html>
+<head>
+    <title>Incident Details</title>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <form asp-action="Create" method="post">
+            <div class="wrapper">
+
+                @foreach (var obj in @ViewBag.IncidentDetails)
+                {
+                    <section class="content-header">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>
+                                    Incident
+                                    <small>#@obj.IssueID</small>
+                                </h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Assign" asp-action="Index">Index</a></li>
+                                    <li class="breadcrumb-item active">AssignTo</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="invoice">
+                        <div class="container-fluid">
+                            <!-- title row -->
+                            <div class="row">
+                                @*<div class="row invoice-info">*@
+                                    <div class="card-body"> @*invoice-col col-sm-6 *@
+                                        <input type="hidden" asp-for="IssueID" value="@obj.IssueID" />
+                                        <address>                                            
+                                            <strong>
+                                                Incident Details (Assigned)
+                                            </strong><br /><br />
+                                            <div class="row">
+                                                <div class="invoice-col col-sm-2">
+                                                    Status  <br /><br />
+                                                    Priority <br /><br />
+                                                    Category <br /><br />
+                                                    Module   <br /><br />
+                                                    Project <br /><br />
+                                                    Assign to <br /><br />
+                                                    Assignee Mail <br /><br />
+                                                </div>
+                                                <div class="invoice-col col-sm-10">
+                                                    :  @obj.Status<br /><br />
+                                                    :  @obj.Priority<br /><br />
+                                                    :  @obj.Category<br /><br />
+                                                    :  @ViewBag.module.ModuleDesc<br /><br />
+                                                    :  @ViewBag.project.ProjectDesc <br /><br />
+                                                    :  @ViewBag.asignee.UserName <br /><br />
+                                                    :  @ViewBag.asignee.UserMail <br /><br />
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </address>@*
+                                        <h6> <a asp-action="Create" class="btn  btn-info float-right">  Assign  </a></h6>*@
+
+                                    </div><!-- /.col -->
+                                @*</div>*@<!-- /.row -->
+                            </div>
+                        </div>
+                    </section>
+                }
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-outline-primary mr-1 float-right">OK</a>
+    </div>
+
+</body>
+</html>

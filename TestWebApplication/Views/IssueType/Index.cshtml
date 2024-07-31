@@ -1,0 +1,179 @@
+﻿@model IEnumerable<TestWebApplication.Models.ViewModels.IssueType>
+@{
+
+    Layout = "_AdminLTE";
+}
+<html lang="en">
+
+<head>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/alt/adminlte.core.css">
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    @*<link rel="stylesheet" href="~/css/all.min.css">
+    <link rel="stylesheet" href="~/css/dataTables.bootstrap4.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">*@
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/InfinityScroll.css">
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/custom.css">
+
+</head>
+<body>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        @if (TempData["ErrorMsg"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                                <h4>
+                                    <i class="fas fa-exclamation"></i>
+                                    @TempData["ErrorMsg"]
+                                </h4>
+                            </div>
+                        }
+                        <h3 class="card-title">Issue Type </h3>
+                    </div><br/>
+                    <div class="row mb-2">
+                        <div class="col-md-8">
+                            <div class="input-group input-group-md">
+                                <div class="input-group-prepend">
+                                    <button id="searchType" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Contain</button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item">Contain</li>
+                                        <li class="dropdown-item">Start With</li>
+                                        <li class="dropdown-item">End With</li>
+                                        <li class="dropdown-item">Equal</li>
+                                    </ul>
+                                </div>
+                                <!-- /btn-group -->
+                                <input id="searchString" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-2 vertical-align">
+                            <i><span id="filterCount"></span></i>
+                        </div>
+                        <div class="col-md-2 ml-auto">
+                            <a class="btn btn-info btn-block" asp-area="" asp-controller="IssueType" asp-action="Create">
+                                <i class="fas fa-plus"></i> Add
+                            </a>
+                        </div>
+                    </div>
+                                        
+                </div>
+                @if (ViewBag.msg != null)
+                {
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                        <h4>
+                            <i class="fas fa-check-circle"></i>
+                            @ViewBag.msg
+                        </h4>
+                    </div>
+                }
+                <div id="mainElement"></div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <!-- /.row -->
+        <!-- /.container-fluid -->    
+
+    </section>
+    <div class="modal fade" id="modal-delete-confirm" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Record</h4>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div> <div class="modal-body">
+                    <p>Are you sure to delete this record?</p>
+                </div>
+                <div class="card-footer">
+                    <input type="button" value="Close" class="btn btn-primary float-left" data-dismiss="modal" />
+                    <form asp-action="Delete">
+                        <input type="hidden" name="IssueTypeID" id="deletedId" value="" />
+                        <input type="submit" value="Confirm" class="btn btn-primary float-right" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="~/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/AdminLTE/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/AdminLTE/dist/js/demo.js"></script>
+    <script src="~/js/InfinityScroll.js" asp-append-version="true"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                clearFilter();
+                var infinityScroll = new InfinityScroll("mainElement", "list-row", "/IssueType/_ListDataPartial", callbackFilter, { sortOrder: "ascending", searchType: "", searchString: "" });
+            });
+            function clearFilter() {
+                $("#mainElement").html('');
+                $("#filterCount").text('');
+            }
+            function callbackFilter(rowCount) {
+                $("#filterCount").text(rowCount + "of " + @ViewBag.ListCount);
+            }
+            let keyupTimer;
+            function loadFilter() {
+                clearTimeout(keyupTimer);
+                keyupTimer = setTimeout(function () {
+                    var searchType = $("#searchType").text();
+                    var searchString = $("#searchString").val();
+                    clearFilter();
+                    var infinityScroll = new InfinityScroll("mainElement", "list-row", "/IssueType/_ListDataPartial", callbackFilter, { sortOrder: "ascending", searchType: searchType, searchString: searchString });
+                }, 800);
+            }
+            $(".input-group .dropdown-item").on("click", function () {
+                $('.input-group .dropdown-toggle').text($(this).text());
+                loadFilter();
+            });
+
+            $(document).on("keydown", "#searchString", function () {
+                loadFilter();
+            });
+
+             $(document).on("click", ".btnDelete",function () {
+                var deletedId = $(this).data("id");
+            $("#modal-delete-confirm #deletedId").val(deletedId);
+                    // As pointed out in comments,
+                        // it is unnecessary to have to manually call the modal.
+            // $('#addBookDialog*). modal ('show');
+                });
+
+        </script>
+    }
+</body>
+</html>
+
+

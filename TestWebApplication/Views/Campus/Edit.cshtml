@@ -1,0 +1,103 @@
+﻿@model TestWebApplication.Models.ViewModels.Campus
+
+@{
+    Layout = "_AdminLTE";
+}
+
+
+<html>
+<head>
+    <title>Edit</title>
+</head>
+</html>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Edit Cuscen Campus</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Campus" asp-action="Index">Index</a></li>
+                            <li class="breadcrumb-item active">Edit</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="row">
+            <div class="col-12 col-sm-12 col-lg-12">
+                <form asp-action="Edit" method="post">
+                    <section class="content">
+                        <div class="container-fluid">
+                            <textarea cols="20" rows="10" asp-for="Description" id="editor"></textarea>
+                            <br />
+                            <br />
+                            <input type="submit" value="Update" class="btn btn-primary" />
+                            <br />
+
+                            <input type="hidden" asp-for="campusId" />
+                        </div>
+                    </section>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<script src="~/js/tinymce/tinymce.min.js"></script>
+
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea#editor',
+        width: 800,
+        height: 450,
+        promotion: false,
+        plugins: 'image link media table lists help',
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | insertfile | link image media | fontsize ',
+        //enable title field in the Image dialog
+        image_title: true,
+        //enable automatic uploads of images represented by blob or data URIs
+        automatic_uploads: true,
+        //add custom filepicker only to Image dialog
+        file_picker_types: 'file image media',
+        file_picker_callback: function (callback, value, meta) {
+            // Create a custom file picker dialog and trigger an AJAX request to upload the file.
+            // Implement your file picker logic here.
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', '.*');
+            input.onchange = function () {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+                // Send an AJAX request to upload the file to the server.
+                fetch('/api/files/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Insert the uploaded file into the TinyMCE editor using callback.
+                        callback(data.url, { text: file.name });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            };
+            input.click();
+        },
+
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        //insertfile_file_types: 'pdf doc docx xlsx',
+        //insertfile_max_size: '500mb',
+    });
+</script>
+

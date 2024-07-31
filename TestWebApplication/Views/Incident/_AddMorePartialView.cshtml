@@ -1,0 +1,112 @@
+﻿@model TestWebApplication.Models.ViewModels.AddMoreViewModel
+@{
+    Layout = null;
+}
+@using TestWebApplication;
+@{
+    //BeginCollectionItemCore already created in HtmlHelper.cs class
+}
+@using (Html.BeginCollectionItem("AddMoreList"))
+{
+    <!----"AddMoreList”-- this is AddMoreViewModel List Object wich is define View -->
+    <div id="removeAddMoreDiv" class="col-xs-12 col-sm-12">
+        <div class="row">
+            ﻿<div class="col-md-6">
+                ﻿<span><i class="fa fa-folder-open"></i> Select File</span>
+                <input type="file" name="UploadFile" id="UploadFile" class="file" accept=".xls,.xlsx,.doc,.docx,.ppt,.pptx,application/pdf,.pdf,.zip,.txt,.jpg,.jpeg,.png" />
+                <p></p>
+                @*<a href="#" id="TagStringDownload" style="text-decoration:underline; color: blue;"></a>*@
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-danger btn-sm removeDiv">Remove</button>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>           
+
+    <script>
+
+        $(".removeDiv").click(function () {
+            $(this).parents("#removeAddMoreDiv").remove();
+
+        });
+
+        $(document).on('change', '#UploadFile', function (e) {
+            if (e.target.files[0] != null) {
+                $("#btnSubmit").prop("disabled", true);
+                var inputFieldId = "UploadFile";
+                var file = e.target.files[0];
+                var formData = new FormData();
+                //console.log(file);
+                formData.append(inputFieldId, file);
+                $.ajax({
+                    type: "POST",
+                    url: '/Incident/CheckUploadDocumentFile',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.message == "TooManyFiles") {
+                            showErrorModel("Please select a single file only!");
+                        }
+                        else if (data.message == "InvalidFileExtension") {
+                            showErrorModel("Invalid File Upload. Please upload again!!");
+                        }
+                        else if (data.message == "Error") {
+                            //showErrorModel(data.errorMessage);
+
+                            const file = document.querySelector('.file');
+                            var emptyfile = document.createElement('input');
+                            emptyfile.type = 'file';
+                            file.files = emptyfile.files;
+
+                            showErrorModel("An error occurred during file upload: Please upload again!!");
+                        }
+                        else if (data.message == "Success") {
+                            //$("#TagStringDownload").val(file);
+                            $("#btnSubmit").prop("disabled", false);
+                        }
+                        else if (data.message == "FileSize") {
+                            showErrorModel("File size is too large. Allowed Max FileSize (20MB). Please upload again!!");
+                        }
+                    },
+
+                    //error: function (response) {
+                    //    showErrorModel(response);
+                    //}
+                    error: function (response) {
+                        showErrorModel("An error occurred during file upload: File size exceeds the limit.");
+                    }
+                });
+            }
+        });
+        function showErrorModel(errorMessage) {
+            $('#alert-modal #alert-modal-body').text(errorMessage);
+            $('#alert-modal').modal('show');
+        }       
+     
+    </script>
+}
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header card text-white bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 id="alert-modal-title" class="modal-title">Error</h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+

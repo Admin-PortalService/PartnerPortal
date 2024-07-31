@@ -1,0 +1,25 @@
+--Migrations command--
+Tools -> Nuget Package Manager -> Package Manager console
+enable-migrations (migration sa use ml so yin thone)
+Add-Migration CustomerUpdate1 -context ApplicationDbContext.(db - table - column - add or update lote pyi yin thone pay)
+update-database -context ApplicationDbContext (db - new table add )
+
+
+
+select * from Users where email='user1@gmail.com'
+select Id,* from AspNetUsers where email='user1@gmail.com'
+select RoleId,* from AspNetUserRoles where UserId='6cecec55-3992-41c8-8e75-4be34517ee4d'
+select RoleName,* from UserAccess where usermail='user1@gmail.com'
+select RoleId,* from Roles where RoleType='Admin'
+
+
+--Remote--
+ec2-13-250-135-170.ap-southeast-1.compute.amazonaws.com
+Go*xjs4LbBizaH)WVusUMei!8bN!Jl8b
+Administrator
+
+
+
+Portal Default pwd -> P@ssw0rd1
+
+

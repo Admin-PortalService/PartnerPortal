@@ -1,0 +1,195 @@
+﻿@model TestWebApplication.Models.ViewModels.Customer
+@using Microsoft.AspNetCore.Identity
+@{
+
+    Layout = "_AdminLTE";
+}
+<html>
+<head>
+   
+    <title>Edit Organization</title>
+    
+</head>
+<body class="hold-transition sidebar-mini">
+        <div class="wrapper">
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                        <h1>Edit Organization </h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Customer" asp-action="Index">Index</a></li>
+                                <li class="breadcrumb-item active">Edit Organization</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+       
+        <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <form asp-action="Edit" method="post">
+                    <section class="content">
+                        <div class="container-fluid">
+                            <div class="col-12 col-sm-12 col-lg-12">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">
+                                        Customer ID
+                                    </label>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control" asp-for="CustomerCode" data-placeholder="Customer Code">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"> Customer Name</label>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control" asp-for="CustomerName" data-placeholder="Customer Name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"> Customer Status</label>
+                                    <div class="col-4">
+                                        <select class="form-control" style="width: 100%;" asp-for="IsActive">
+                                            <option value="True" selected>Active</option>
+                                            <option value="False">InActive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                        <section class="content">
+                    <div class="card card-primary card-outline card-tabs">
+                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"> Organization  </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-two-settings-tab" data-toggle="pill" href="#custom-tabs-two-settings" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Projects</a>
+                            </li>
+                           
+
+                        </ul>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-two-tabContent">
+                                <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                                    <section class="content">
+                                            <div class="container-fluid">
+                                                <h2 class='page-header'><span>Address Info</span></h2>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Customer Email</label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="CustomerEmail" data-placeholder="Customer Email">
+                                                        <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Address 1</label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="CustomerAddress1" data-placeholder="Customer Address 1">
+                                                        <span asp-validation-for="CustomerAddress1" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Address 2</label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="CustomerAddress2" data-placeholder="Customer Address 2">
+                                                        <span asp-validation-for="CustomerAddress2" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Country</label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="Country" data-placeholder="Country">
+                                                        <span asp-validation-for="Country" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <h2 class='page-header'><span>Contact Info</span></h2>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Contact Person </label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="ContactPerson" data-placeholder="Enter Contact Person Name">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Job Title</label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="ContactInfo" data-placeholder="Contact Info">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Contact Email</label>
+                                                    <div class="col-sm-6">
+                                                    <input type="text" class="form-control" asp-for="ContactEmail" data-placeholder="Contact Mail">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    <input type="hidden" asp-for="CustomerID" />
+                                        <input type="hidden" asp-for="CreatedBy" />
+                                        <input type="hidden" asp-for="CreatedOn" />
+                                        <input type="hidden" name="ModifiedBy" value="@User.Identity?.Name" />
+                                        <input type="hidden" asp-for="ModifiedOn" />
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-info float-right">Save</button>
+                                        </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
+                                    <div class="card-body">
+                                        Project List
+                                            <table id="example2" class="table table-bordered table-hover">
+                                            <thead background="#17a2b8">
+                                                <tr>
+                                                    <th><span>ProjectID</span></th>
+                                                    <th><span>Project Name</span></th>
+                                                    <th><span>Description</span></th>
+                                                    <th><span>Active From</span></th>
+                                                    <th><span>Active To</span></th>
+                                                    <th><span>Last Date</span></th>
+                                                    <th><span>Status</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var obj in @ViewBag.projectList)
+                                                {
+                                                    <tr>
+                                                        <td>@*<a asp-controller="Projects" asp-action="Edit" asp-route-id="@obj.ProjectID">*@ @obj.ProjectID</td>
+                                                        <td> @obj.ProjectName</td>
+                                                        <td> @obj.ProjectDesc</td>
+                                                        <td>@obj.ValidFrom</td>
+                                                        <td>@obj.ValidTo</td>
+                                                        <td> @obj.LastDate</td>
+                                                        @if(@obj.IsActive = true)
+                                                        {
+                                                            <td> Active</td>
+                                                        } @if(@obj.IsActive = false)
+                                                        {
+                                                            <td> InActive</td>
+                                                        }
+                                                        
+
+                                                    </tr>
+
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+                </form>
+                </div>
+        </div>
+       
+            <!-- /.content -->
+        </div>
+
+</body>
+</html>
